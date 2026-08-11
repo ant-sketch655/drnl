@@ -47,9 +47,9 @@ local success, err = pcall(function()
     local comandos = {
         {nome = "//Desviar", cmd = "//Desviar"},
         {nome = "//Jab", cmd = "//Jab"},
-        {nome = "//tiro na cabeça", cmd = "//acerto crítico na cabeça [rajada] - 10 tiros  - 7.62x51mm"},
+        {nome = "//tiro na cabeça", cmd = "//Tiro na cabeça"},
         {nome = "//Furar pneu", cmd = "//Furar pneu"},
-        {nome = "//tiro no tronco", cmd = "//acerto crítico no tronco [rajada] - 10 tiros  - 7.62x51mm"},
+        {nome = "//tiro no tronco", cmd = "//Tiro no tronco"},
         {nome = "//Derrubar no chão", cmd = "//Derrubar no chão"},
         {nome = "//Render", cmd = "//Render"},
         {nome = "//mata leão", cmd = "//Mata leão"},
