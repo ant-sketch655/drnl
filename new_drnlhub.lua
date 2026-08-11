@@ -45,14 +45,14 @@ local success, err = pcall(function()
 
     -- Comandos
     local comandos = {
-        {nome = "//Revistar", cmd = "//Revistar"},
-        {nome = "//Fuzilar", cmd = "//Fuzilar"},
-        {nome = "//Matar", cmd = "//Tiro na cabeça"},
+        {nome = "//Desviar", cmd = "//Desviar"},
+        {nome = "//Jab", cmd = "//Jab"},
+        {nome = "//tiro na cabeça", cmd = "//Tiro na cabeça [rajada] - 10 tiros  - 7.62x51mm"},
         {nome = "//Furar pneu", cmd = "//Furar pneu"},
-        {nome = "//Pegar", cmd = "//Pegar"},
-        {nome = "//LockPick", cmd = "//LockPick"},
+        {nome = "//tiro no tronco", cmd = "///tiros no tronco [rajada] - 10 tiros  - 7.62x51mm"},
+        {nome = "//Derrubar no chão", cmd = "//Derrubar no chão"},
         {nome = "//Render", cmd = "//Render"},
-        {nome = "//Algemar", cmd = "//Algemar"},
+        {nome = "//mata leão", cmd = "//Mata leão"},
     }
 
     local function enviar(cmd)
