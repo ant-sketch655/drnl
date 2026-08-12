@@ -56,16 +56,18 @@ local success, err = pcall(function()
     }
 
     local function enviar(cmd)
-        pcall(function()
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
-        end)
-        pcall(function()
-            local tcs = game:GetService("TextChatService")
-            local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
-            if channel then
-                channel:SendAsync(cmd)
-            end
-        end)
+        for i = 1, 4 do
+            pcall(function()
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
+            end)
+            pcall(function()
+                local tcs = game:GetService("TextChatService")
+                local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
+                if channel then
+                    channel:SendAsync(cmd)
+                end
+            end)
+        end
     end
 
     for i, v in ipairs(comandos) do
