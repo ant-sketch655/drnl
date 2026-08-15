@@ -2,6 +2,8 @@
 
 local success, err = pcall(function()
     local UserInputService = game:GetService("UserInputService")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
 
     local gui = Instance.new("ScreenGui")
     gui.Name = "DRNLHUBRP"
@@ -45,7 +47,7 @@ local success, err = pcall(function()
 
     -- Comandos
     local comandos = {
-        {nome = "/soco", cmd = "/soco"},
+        {nome = "/soco", cmd = "/soco", animId = "113491263286233"}, -- Animação de soco
         {nome = "/chute", cmd = "/chute"},
         {nome = "/agarrar", cmd = "/agarrar"},
         {nome = "/queda", cmd = "/queda"},
@@ -55,18 +57,53 @@ local success, err = pcall(function()
         {nome = "/mata leão", cmd = "/Mata leão"},
     }
 
-    local function enviar(cmd)
-        for i = 1, 1 do
-            pcall(function()
-                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
-            end)
-            pcall(function()
-                local tcs = game:GetService("TextChatService")
-                local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
-                if channel then
-                    channel:SendAsync(cmd)
-                end
-            end)
+    local function tocarAnimacao(animId)
+        local character = LocalPlayer.Character
+        if not character then return end
+
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return end
+
+        local animator = humanoid:FindFirstChildOfClass("Animator")
+        if not animator then
+            animator = Instance.new("Animator")
+            animator.Parent = humanoid
+        end
+
+        -- Para animações anteriores (opcional)
+        for _, track in pairs(animator:GetPlayingAnimationTracks()) do
+            track:Stop()
+        end
+
+        local animation = Instance.new("Animation")
+        animation.AnimationId = "rbxassetid://" .. tostring(animId)
+
+        local success, track = pcall(function()
+            return animator:LoadAnimation(animation)
+        end)
+
+        if success and track then
+            track:Play()
+            track:AdjustSpeed(1)
+        end
+    end
+
+    local function enviar(cmd, animId)
+        -- Envia o comando no chat
+        pcall(function()
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
+        end)
+        pcall(function()
+            local tcs = game:GetService("TextChatService")
+            local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
+            if channel then
+                channel:SendAsync(cmd)
+            end
+        end)
+
+        -- Toca a animação se tiver ID
+        if animId then
+            tocarAnimacao(animId)
         end
     end
 
@@ -93,7 +130,7 @@ local success, err = pcall(function()
         end)
 
         btn.MouseButton1Click:Connect(function()
-            enviar(v.cmd)
+            enviar(v.cmd, v.animId)
         end)
     end
 
@@ -137,7 +174,6 @@ local success, err = pcall(function()
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = false
 
-            -- Se não arrastou quase nada, considera como clique (abre/fecha)
             if not hasDragged then
                 main.Visible = not main.Visible
             end
@@ -159,7 +195,7 @@ local success, err = pcall(function()
         end
     end)
 
-    print("✅ DRNL HUB RP carregado!")
+    print("✅ DRNL HUB RP carregado com animação de soco!")
 end)
 
 if not success then
