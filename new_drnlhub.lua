@@ -56,7 +56,7 @@ local success, err = pcall(function()
     }
 
     local function enviar(cmd)
-        for i = 1, 4 do
+        for i = 1, 1 do
             pcall(function()
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
             end)
