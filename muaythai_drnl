@@ -59,11 +59,11 @@ local success, err = pcall(function()
 
 	-- ===================== COMANDOS (todos preservados) =====================
 	local comandos = {
-		{nome = "/soco 🥊", cmd = "/soco", animId = "507770453"},
-		{nome = "/direto 🥊", cmd = "/direto", animId = "507770453"},
-		{nome = "/jab 🥊", cmd = "/jab", animId = "507770453"},
-		{nome = "/cruzado 🥊", cmd = "/cruzado", animId = "507770453"},
-		{nome = "/gancho 🥊", cmd = "/gancho", animId = "507770453"},
+		{nome = "/soco 🥊", cmd = "/soco"},
+		{nome = "/direto 🥊", cmd = "/direto"},
+		{nome = "/jab 🥊", cmd = "/jab"},
+		{nome = "/cruzado 🥊", cmd = "/cruzado"},
+		{nome = "/gancho 🥊", cmd = "/gancho"},
 		{nome = "/chute 🦵", cmd = "/chute"},
 		{nome = "/chute baixo 🦵", cmd = "/chute baixo"},
 		{nome = "/chute alto 🦵", cmd = "/chute alto"},
