@@ -1,180 +1,209 @@
--- DRNL Keybinds RP (escolhe tecla + manda 3x)
+-- DRNL Keybinds - Versão Forçada
 
-local success, err = pcall(function()
-    local UserInputService = game:GetService("UserInputService")
-    local Players = game:GetService("Players")
-    local LocalPlayer = Players.LocalPlayer
+print("=== INICIANDO SCRIPT ===")
 
-    -- Comandos disponíveis
-    local comandos = {
-        {nome = "/mat", cmd = "/mat", key = nil},
-        {nome = "/tiro na cabeca", cmd = "/tiro na cabeca", key = nil},
-        {nome = "/tirar comunicacao", cmd = "/tirar comunicacao", key = nil},
-        {nome = "/render", cmd = "/render", key = nil},
-        {nome = "/furar pneu", cmd = "/furar pneu", key = nil},
-        {nome = "/lockpick", cmd = "/lockpick", key = nil},
-        {nome = "/algemar", cmd = "/algemar", key = nil},
-    }
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
-    local waitingForKey = nil
+print("Serviços carregados")
 
-    -- Função que envia o comando 3 vezes
-    local function enviar(cmd)
-        for i = 1, 3 do
-            pcall(function()
-                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
-            end)
-            pcall(function()
-                local tcs = game:GetService("TextChatService")
-                local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
-                if channel then
-                    channel:SendAsync(cmd)
-                end
-            end)
-        end
+local comandos = {
+    {nome = "/mat", cmd = "/mat", key = nil},
+    {nome = "/tiro na cabeca", cmd = "/tiro na cabeca", key = nil},
+    {nome = "/tirar comunicacao", cmd = "/tirar comunicacao", key = nil},
+    {nome = "/render", cmd = "/render", key = nil},
+    {nome = "/furar pneu", cmd = "/furar pneu", key = nil},
+    {nome = "/lockpick", cmd = "/lockpick", key = nil},
+    {nome = "/algemar", cmd = "/algemar", key = nil},
+}
+
+local waitingForKey = nil
+
+local function enviar(cmd)
+    for i = 1, 3 do
+        pcall(function()
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
+        end)
+        pcall(function()
+            local tcs = game:GetService("TextChatService")
+            local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
+            if channel then
+                channel:SendAsync(cmd)
+            end
+        end)
     end
+    print("Comando enviado 3x:", cmd)
+end
 
-    -- GUI
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "DRNLKeybinds"
-    gui.ResetOnSpawn = false
-    gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    gui.IgnoreGuiInset = true
-    gui.DisplayOrder = 999999
+-- Criar GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "DRNLKeybinds"
+gui.ResetOnSpawn = false
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+gui.IgnoreGuiInset = true
+gui.DisplayOrder = 999999
+gui.Enabled = true
 
+-- Tentar vários locais para parentar
+local parented = false
+
+local function tentarParent()
     if gethui then
-        gui.Parent = gethui()
-    else
-        gui.Parent = game:GetService("CoreGui")
-    end
-
-    local main = Instance.new("Frame")
-    main.Size = UDim2.new(0, 260, 0, 340)
-    main.Position = UDim2.new(0.5, -130, 0.5, -170)
-    main.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
-    main.BorderSizePixel = 0
-    main.Visible = true
-    main.Parent = gui
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
-    corner.Parent = main
-
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 36)
-    title.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-    title.Text = "  Configurar Teclas"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.Font = Enum.Font.GothamBold
-    title.TextSize = 14
-    title.TextXAlignment = Enum.TextXAlignment.Left
-    title.Parent = main
-
-    local titleCorner = Instance.new("UICorner")
-    titleCorner.CornerRadius = UDim.new(0, 10)
-    titleCorner.Parent = title
-
-    local info = Instance.new("TextLabel")
-    info.Size = UDim2.new(1, -20, 0, 20)
-    info.Position = UDim2.new(0, 10, 0, 40)
-    info.BackgroundTransparency = 1
-    info.Text = "Clique no comando e pressione a tecla"
-    info.TextColor3 = Color3.fromRGB(180, 180, 180)
-    info.Font = Enum.Font.Gotham
-    info.TextSize = 12
-    info.Parent = main
-
-    local buttons = {}
-
-    local function atualizarTexto(i)
-        local v = comandos[i]
-        local keyName = v.key and v.key.Name or "Nenhuma"
-        buttons[i].Text = v.nome .. "  →  [" .. keyName .. "]"
-    end
-
-    for i, v in ipairs(comandos) do
-        local btn = Instance.new("TextButton")
-        btn.Size = UDim2.new(1, -20, 0, 32)
-        btn.Position = UDim2.new(0, 10, 0, 70 + (i-1) * 36)
-        btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        btn.Text = v.nome .. "  →  [Nenhuma]"
-        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        btn.Font = Enum.Font.Gotham
-        btn.TextSize = 13
-        btn.Parent = main
-
-        local btnCorner = Instance.new("UICorner")
-        btnCorner.CornerRadius = UDim.new(0, 6)
-        btnCorner.Parent = btn
-
-        buttons[i] = btn
-
-        btn.MouseEnter:Connect(function()
-            if waitingForKey \~= i then
-                btn.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-            end
-        end)
-        btn.MouseLeave:Connect(function()
-            if waitingForKey \~= i then
-                btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            end
-        end)
-
-        btn.MouseButton1Click:Connect(function()
-            if waitingForKey then
-                buttons[waitingForKey].BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                atualizarTexto(waitingForKey)
-            end
-
-            waitingForKey = i
-            btn.BackgroundColor3 = Color3.fromRGB(0, 120, 80)
-            btn.Text = v.nome .. "  →  [Pressione uma tecla...]"
+        pcall(function()
+            gui.Parent = gethui()
+            parented = true
+            print("Parent: gethui()")
         end)
     end
 
-    -- Detecta tecla
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if waitingForKey and input.UserInputType == Enum.UserInputType.Keyboard then
-            local i = waitingForKey
-            comandos[i].key = input.KeyCode
-            waitingForKey = nil
-            buttons[i].BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            atualizarTexto(i)
-            return
+    if not parented then
+        pcall(function()
+            gui.Parent = game:GetService("CoreGui")
+            parented = true
+            print("Parent: CoreGui")
+        end)
+    end
+
+    if not parented then
+        pcall(function()
+            gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+            parented = true
+            print("Parent: PlayerGui")
+        end)
+    end
+end
+
+tentarParent()
+
+if not parented then
+    warn("NÃO CONSEGUIU PARENTAR A GUI!")
+else
+    print("GUI parentada com sucesso")
+end
+
+-- Janela
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 280, 0, 380)
+main.Position = UDim2.new(0.5, -140, 0.5, -190)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+main.BorderSizePixel = 0
+main.Visible = true
+main.Parent = gui
+
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 12)
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+title.Text = "  Configurar Teclas (DRNL)"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 15
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = main
+Instance.new("UICorner", title).CornerRadius = UDim.new(0, 12)
+
+local info = Instance.new("TextLabel")
+info.Size = UDim2.new(1, -20, 0, 20)
+info.Position = UDim2.new(0, 10, 0, 48)
+info.BackgroundTransparency = 1
+info.Text = "Clique no comando e aperte a tecla"
+info.TextColor3 = Color3.fromRGB(170, 170, 170)
+info.Font = Enum.Font.Gotham
+info.TextSize = 12
+info.Parent = main
+
+local buttons = {}
+
+local function atualizarTexto(i)
+    local v = comandos[i]
+    local keyName = v.key and v.key.Name or "Nenhuma"
+    buttons[i].Text = "  " .. v.nome .. "  →  [" .. keyName .. "]"
+end
+
+for i, v in ipairs(comandos) do
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -20, 0, 36)
+    btn.Position = UDim2.new(0, 10, 0, 78 + (i-1) * 40)
+    btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    btn.Text = "  " .. v.nome .. "  →  [Nenhuma]"
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.Gotham
+    btn.TextSize = 13
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Parent = main
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+
+    buttons[i] = btn
+
+    btn.MouseButton1Click:Connect(function()
+        if waitingForKey then
+            buttons[waitingForKey].BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+            atualizarTexto(waitingForKey)
         end
-
-        if gameProcessed then return end
-
-        for _, v in ipairs(comandos) do
-            if v.key and input.KeyCode == v.key then
-                enviar(v.cmd) -- manda 3 vezes
-                break
-            end
-        end
+        waitingForKey = i
+        btn.BackgroundColor3 = Color3.fromRGB(0, 140, 70)
+        btn.Text = "  " .. v.nome .. "  →  [Pressione a tecla...]"
+        print("Aguardando tecla para:", v.nome)
     end)
+end
 
-    -- Botão fechar
-    local close = Instance.new("TextButton")
-    close.Size = UDim2.new(0, 30, 0, 30)
-    close.Position = UDim2.new(1, -35, 0, 3)
-    close.BackgroundColor3 = Color3.fromRGB(60, 30, 30)
-    close.Text = "X"
-    close.TextColor3 = Color3.fromRGB(255, 255, 255)
-    close.Font = Enum.Font.GothamBold
-    close.TextSize = 14
-    close.Parent = main
+-- Fechar
+local close = Instance.new("TextButton")
+close.Size = UDim2.new(0, 34, 0, 34)
+close.Position = UDim2.new(1, -40, 0, 3)
+close.BackgroundColor3 = Color3.fromRGB(80, 30, 30)
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(255, 255, 255)
+close.Font = Enum.Font.GothamBold
+close.TextSize = 16
+close.Parent = main
+Instance.new("UICorner", close).CornerRadius = UDim.new(0, 6)
 
-    local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 6)
-    closeCorner.Parent = close
-
-    close.MouseButton1Click:Connect(function()
-        main.Visible = false
-    end)
-
-    print("✅ DRNL Keybinds carregado! (manda 3x)")
+close.MouseButton1Click:Connect(function()
+    main.Visible = false
+    print("Janela fechada")
 end)
 
-if not success then
-    warn("Erro: " .. tostring(err))
-end
+-- Bolinha grande e bem visível
+local bolinha = Instance.new("TextButton")
+bolinha.Size = UDim2.new(0, 55, 0, 55)
+bolinha.Position = UDim2.new(0, 15, 0.4, 0)
+bolinha.BackgroundColor3 = Color3.fromRGB(0, 120, 70)
+bolinha.Text = "⌨"
+bolinha.TextColor3 = Color3.fromRGB(255, 255, 255)
+bolinha.Font = Enum.Font.GothamBold
+bolinha.TextSize = 24
+bolinha.Parent = gui
+Instance.new("UICorner", bolinha).CornerRadius = UDim.new(1, 0)
+
+bolinha.MouseButton1Click:Connect(function()
+    main.Visible = not main.Visible
+    print("Bolinha clicada - Visible:", main.Visible)
+end)
+
+-- Teclas
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if waitingForKey and input.UserInputType == Enum.UserInputType.Keyboard then
+        local i = waitingForKey
+        comandos[i].key = input.KeyCode
+        waitingForKey = nil
+        buttons[i].BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        atualizarTexto(i)
+        print("Tecla definida:", input.KeyCode.Name, "para", comandos[i].nome)
+        return
+    end
+
+    if gameProcessed then return end
+
+    for _, v in ipairs(comandos) do
+        if v.key and input.KeyCode == v.key then
+            enviar(v.cmd)
+            break
+        end
+    end
+end)
+
+print("=== SCRIPT CARREGADO COM SUCESSO ===")
+print("Procure a bolinha VERDE no lado esquerdo da tela")
