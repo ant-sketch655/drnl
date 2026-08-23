@@ -1,4 +1,4 @@
--- DRNL Keybinds - Versão Forçada
+-- DRNL Keybinds - Versão Final
 
 print("=== INICIANDO SCRIPT ===")
 
@@ -6,22 +6,20 @@ local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-print("Serviços carregados")
-
 local comandos = {
-    {nome = "/mat", cmd = "/mat", key = nil},
-    {nome = "/tiro na cabeca", cmd = "/tiro na cabeca", key = nil},
-    {nome = "/tirar comunicacao", cmd = "/tirar comunicacao", key = nil},
-    {nome = "/render", cmd = "/render", key = nil},
-    {nome = "/furar pneu", cmd = "/furar pneu", key = nil},
-    {nome = "/lockpick", cmd = "/lockpick", key = nil},
-    {nome = "/algemar", cmd = "/algemar", key = nil},
+    {nome = "/mat", cmd = "/mat", key = nil, vezes = 3},
+    {nome = "/tiro na cabeca", cmd = "/tiro na cabeca", key = nil, vezes = 3},
+    {nome = "/tirar comunicacao", cmd = "/tirar comunicacao", key = nil, vezes = 1},
+    {nome = "/render", cmd = "/render", key = nil, vezes = 3},
+    {nome = "/furar pneu", cmd = "/furar pneu", key = nil, vezes = 3},
+    {nome = "/lockpick", cmd = "/lockpick", key = nil, vezes = 1},
+    {nome = "/algemar", cmd = "/algemar", key = nil, vezes = 1},
 }
 
 local waitingForKey = nil
 
-local function enviar(cmd)
-    for i = 1, 3 do
+local function enviar(cmd, vezes)
+    for i = 1, (vezes or 1) do
         pcall(function()
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
         end)
@@ -33,10 +31,10 @@ local function enviar(cmd)
             end
         end)
     end
-    print("Comando enviado 3x:", cmd)
+    print("Enviado:", cmd, "x" .. (vezes or 1))
 end
 
--- Criar GUI
+-- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "DRNLKeybinds"
 gui.ResetOnSpawn = false
@@ -45,44 +43,17 @@ gui.IgnoreGuiInset = true
 gui.DisplayOrder = 999999
 gui.Enabled = true
 
--- Tentar vários locais para parentar
 local parented = false
-
-local function tentarParent()
-    if gethui then
-        pcall(function()
-            gui.Parent = gethui()
-            parented = true
-            print("Parent: gethui()")
-        end)
-    end
-
-    if not parented then
-        pcall(function()
-            gui.Parent = game:GetService("CoreGui")
-            parented = true
-            print("Parent: CoreGui")
-        end)
-    end
-
-    if not parented then
-        pcall(function()
-            gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-            parented = true
-            print("Parent: PlayerGui")
-        end)
-    end
+if gethui then
+    pcall(function() gui.Parent = gethui() parented = true end)
 end
-
-tentarParent()
-
 if not parented then
-    warn("NÃO CONSEGUIU PARENTAR A GUI!")
-else
-    print("GUI parentada com sucesso")
+    pcall(function() gui.Parent = game:GetService("CoreGui") parented = true end)
+end
+if not parented then
+    pcall(function() gui.Parent = LocalPlayer:WaitForChild("PlayerGui") parented = true end)
 end
 
--- Janela
 local main = Instance.new("Frame")
 main.Size = UDim2.new(0, 280, 0, 380)
 main.Position = UDim2.new(0.5, -140, 0.5, -190)
@@ -90,7 +61,6 @@ main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 main.BorderSizePixel = 0
 main.Visible = true
 main.Parent = gui
-
 Instance.new("UICorner", main).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
@@ -145,11 +115,9 @@ for i, v in ipairs(comandos) do
         waitingForKey = i
         btn.BackgroundColor3 = Color3.fromRGB(0, 140, 70)
         btn.Text = "  " .. v.nome .. "  →  [Pressione a tecla...]"
-        print("Aguardando tecla para:", v.nome)
     end)
 end
 
--- Fechar
 local close = Instance.new("TextButton")
 close.Size = UDim2.new(0, 34, 0, 34)
 close.Position = UDim2.new(1, -40, 0, 3)
@@ -163,10 +131,8 @@ Instance.new("UICorner", close).CornerRadius = UDim.new(0, 6)
 
 close.MouseButton1Click:Connect(function()
     main.Visible = false
-    print("Janela fechada")
 end)
 
--- Bolinha grande e bem visível
 local bolinha = Instance.new("TextButton")
 bolinha.Size = UDim2.new(0, 55, 0, 55)
 bolinha.Position = UDim2.new(0, 15, 0.4, 0)
@@ -180,10 +146,8 @@ Instance.new("UICorner", bolinha).CornerRadius = UDim.new(1, 0)
 
 bolinha.MouseButton1Click:Connect(function()
     main.Visible = not main.Visible
-    print("Bolinha clicada - Visible:", main.Visible)
 end)
 
--- Teclas
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if waitingForKey and input.UserInputType == Enum.UserInputType.Keyboard then
         local i = waitingForKey
@@ -191,7 +155,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         waitingForKey = nil
         buttons[i].BackgroundColor3 = Color3.fromRGB(45, 45, 45)
         atualizarTexto(i)
-        print("Tecla definida:", input.KeyCode.Name, "para", comandos[i].nome)
         return
     end
 
@@ -199,11 +162,11 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 
     for _, v in ipairs(comandos) do
         if v.key and input.KeyCode == v.key then
-            enviar(v.cmd)
+            enviar(v.cmd, v.vezes)
             break
         end
     end
 end)
 
-print("=== SCRIPT CARREGADO COM SUCESSO ===")
-print("Procure a bolinha VERDE no lado esquerdo da tela")
+print("=== SCRIPT CARREGADO ===")
+print("Bolinha verde no lado esquerdo para abrir/fechar")
