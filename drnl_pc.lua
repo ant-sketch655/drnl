@@ -1,4 +1,4 @@
--- DRNL Keybinds - Versão Final
+-- DRNL Keybinds - Bolinha no canto superior direito
 
 print("=== INICIANDO SCRIPT ===")
 
@@ -31,7 +31,6 @@ local function enviar(cmd, vezes)
             end
         end)
     end
-    print("Enviado:", cmd, "x" .. (vezes or 1))
 end
 
 -- GUI
@@ -59,7 +58,7 @@ main.Size = UDim2.new(0, 280, 0, 380)
 main.Position = UDim2.new(0.5, -140, 0.5, -190)
 main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 main.BorderSizePixel = 0
-main.Visible = true
+main.Visible = false
 main.Parent = gui
 Instance.new("UICorner", main).CornerRadius = UDim.new(0, 12)
 
@@ -133,14 +132,15 @@ close.MouseButton1Click:Connect(function()
     main.Visible = false
 end)
 
+-- Bolinha no lugar marcado (canto superior direito)
 local bolinha = Instance.new("TextButton")
-bolinha.Size = UDim2.new(0, 55, 0, 55)
-bolinha.Position = UDim2.new(0, 15, 0.4, 0)
+bolinha.Size = UDim2.new(0, 42, 0, 42)
+bolinha.Position = UDim2.new(1, -70, 0, 8) -- Posição marcada na imagem
 bolinha.BackgroundColor3 = Color3.fromRGB(0, 120, 70)
 bolinha.Text = "⌨"
 bolinha.TextColor3 = Color3.fromRGB(255, 255, 255)
 bolinha.Font = Enum.Font.GothamBold
-bolinha.TextSize = 24
+bolinha.TextSize = 20
 bolinha.Parent = gui
 Instance.new("UICorner", bolinha).CornerRadius = UDim.new(1, 0)
 
@@ -169,4 +169,4 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 print("=== SCRIPT CARREGADO ===")
-print("Bolinha verde no lado esquerdo para abrir/fechar")
+print("Bolinha no canto superior direito")
