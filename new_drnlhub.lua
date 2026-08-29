@@ -57,7 +57,7 @@ Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 local comandos = {
     {nome = "//armar c4", cmd = "//Armar C4", vezes = 1},
     {nome = "//ativar c4", cmd = "//Ativar C4", vezes = 1},
-    {nome = "//mat", cmd = "/TIRO NA CABEÇA -[FAMÍLIA DORNELLE] -🇮🇹", vezes = 3},
+    {nome = "//mat", cmd = "/TIRO NA CABEÇA", vezes = 3},
     {nome = "//Furar pneu", cmd = "//Furar pneu", vezes = 3},
     {nome = "//tiro no rosto", cmd = "//TIRO NO ROSTO -[FAMÍLIA DORNELLE]-🇮🇹", vezes = 3},
     {nome = "//Derrubar no chão", cmd = "//Derrubar no chão", vezes = 1},
