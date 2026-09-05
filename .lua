@@ -134,6 +134,8 @@ local comandos = {
 /triângulo
 ]], cmd = "[JIU-JITSU 🇧🇷] GANCHO + RASPAGEM + TRIÂNGULO"},
 
+{nome = ——— DIVISÃO ———, cmd = "."},
+	
 {nome = [[
 /chute frontal
 /chute lateral
