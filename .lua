@@ -104,21 +104,64 @@ listPadding.Parent = scroll
 
 -- ====================== COMANDOS (mantidos exatamente iguais) ======================
 local comandos = {
-	{nome = "[KARATÊ 🇯🇵] CHUTE CIRCULAR", cmd = "/chute circular"},
-	{nome = "[TAEKWONDO 🇰🇷] CHUTE ALTO", cmd = "/chute alto"},
-	{nome = "[MUAY THAI 🇹🇭] CHUTE BAIXO", cmd = "/chute baixo"},
-	{nome = "[TAEKWONDO 🇰🇷] CHUTE GIRATÓRIO", cmd = "/chute giratório"},
-	{nome = "[TAEKWONDO 🇰🇷] CHUTE GIRATÓRIO ALTO", cmd = "/chute giratório alto"},
-	{nome = "[CAPOEIRA 🇧🇷] MEIA-LUA", cmd = "/meia-lua"},
-	{nome = "[SAVATE 🇫🇷] CHUTE LATERAL RÁPIDO", cmd = "/chute lateral rápido"},
-	{nome = "[KARATÊ 🇯🇵] CHUTE FRONTAL + CHUTE CIRCULAR", cmd = "/chute frontal + chute circular"},
-	{nome = "[MUAY THAI 🇹🇭] CHUTE BAIXO + CHUTE MÉDIO", cmd = "/chute baixo + chute médio"},
-	{nome = "[TAEKWONDO 🇰🇷] CHUTE ALTO + CHUTE GIRATÓRIO", cmd = "/chute alto + chute giratório"},
-	{nome = "[CAPOEIRA 🇧🇷] GINGA + MEIA-LUA", cmd = "/ginga + meia-lua"},
-	{nome = "[TAEKWONDO 🇰🇷] CHUTE 1080 GRAUS", cmd = "/chute 1080 graus"},
-	{nome = "[JIU-JITSU 🇧🇷] CHAVE DE BRAÇO", cmd = "/chave de braço"},
-	{nome = "[TAEKWONDO 🇰🇷] RECUAR + DESVIAR", cmd = "/recuar + desviar"},
-	{nome = "[KARATÊ 🇯🇵] BLOQUEAR + AFASTAR", cmd = "/bloquear + afastar"},
+{nome = [[
+/rasteira
+/chave de braço
+]], cmd = "[JIU-JITSU 🇧🇷] RASTEIRA + CHAVE DE BRAÇO"},
+
+{nome = [[
+/guarda fechada
+/raspagem
+/montada
+]], cmd = "[JIU-JITSU 🇧🇷] GUARDA FECHADA + RASPAGEM + MONTADA"},
+
+{nome = [[
+/guarda aberta
+/raspagem com a perna
+/controle lateral
+]], cmd = "[JIU-JITSU 🇧🇷] GUARDA ABERTA + RASPAGEM + CONTROLE LATERAL"},
+
+{nome = [[
+/raspagem
+/passagem de guarda
+/montada
+/chave de braço
+]], cmd = "[JIU-JITSU 🇧🇷] RASPAGEM + PASSAGEM DE GUARDA + MONTADA + CHAVE DE BRAÇO"},
+
+{nome = [[
+/gancho com a perna
+/raspagem
+/triângulo
+]], cmd = "[JIU-JITSU 🇧🇷] GANCHO + RASPAGEM + TRIÂNGULO"},
+
+{nome = [[
+/chute frontal
+/chute lateral
+]], cmd = "[TAEKWONDO 🇰🇷] CHUTE FRONTAL + CHUTE LATERAL"},
+
+{nome = [[
+/chute baixo
+/chute alto
+/chute giratório
+]], cmd = "[TAEKWONDO 🇰🇷] CHUTE BAIXO + CHUTE ALTO + CHUTE GIRATÓRIO"},
+
+{nome = [[
+/chute frontal
+/chute giratório
+/chute giratório alto
+]], cmd = "[TAEKWONDO 🇰🇷] CHUTE FRONTAL + CHUTE GIRATÓRIO + CHUTE GIRATÓRIO ALTO"},
+
+{nome = [[
+/chute lateral
+/chute de gancho
+/chute descendente
+]], cmd = "[TAEKWONDO 🇰🇷] CHUTE LATERAL + CHUTE DE GANCHO + CHUTE DESCENDENTE"},
+
+{nome = [[
+/chute traseiro
+/chute giratório
+/chute 540 graus
+]], cmd = "[TAEKWONDO 🇰🇷] CHUTE TRASEIRO + CHUTE GIRATÓRIO + CHUTE 540 GRAUS"},
 }
 
 -- Função de envio (mantida a lógica original)
