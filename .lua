@@ -136,7 +136,7 @@ local comandos = {
 
 {nome = [[
 	—— DIVISÃO ——
-]], cmd = "."},
+]], cmd = "/PESAR"},
 	
 {nome = [[
 /chute frontal
@@ -166,6 +166,11 @@ local comandos = {
 /chute giratório
 /chute 540 graus
 ]], cmd = "[TAEKWONDO 🇰🇷] CHUTE TRASEIRO + CHUTE GIRATÓRIO + CHUTE 540 GRAUS"},
+
+{nome = [[
+/desvio 
+/segurar perna
+]], cmd = "/DEVIAR + SEGURAR PERNA"},
 }
 
 -- Função de envio (mantida a lógica original)
@@ -182,7 +187,7 @@ local function enviar(cmd, vezes)
 			end
 		end)
 	end
-end
+	end
 
 -- Criação dos botões
 for i, v in ipairs(comandos) do
