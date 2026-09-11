@@ -135,7 +135,7 @@ local comandos = {
 ]], cmd = "[JIU-JITSU 🇧🇷] GANCHO + RASPAGEM + TRIÂNGULO"},
 
 {nome = [[
-	——— PESAR ———
+	——— APERTAR ———
 ]], cmd = "/APERTAR"},
 	
 {nome = [[
