@@ -113,7 +113,7 @@ local comandos = {
 /guarda fechada
 /raspagem
 /montada
-]], cmd = "[JIU-JITSU 🇧🇷] GUARDA FECHADA + RASPAGEM + MONTADA"},
+]], cmd = "[JIU-JITSU 🇧🇷] GUARDA FECHADA + PROJEÇÃO DE QUADRIL + MONTADA + FECHAR BRECHAS"},
 
 {nome = [[
 /guarda aberta
@@ -135,7 +135,11 @@ local comandos = {
 ]], cmd = "[JIU-JITSU 🇧🇷] GANCHO + RASPAGEM + TRIÂNGULO"},
 
 {nome = [[
-	—— DIVISÃO ——
+	——— PESAR ———
+]], cmd = "/APERTAR"},
+	
+{nome = [[
+	——— PESAR ———
 ]], cmd = "/PESAR"},
 	
 {nome = [[
