@@ -8,9 +8,11 @@ local LocalPlayer = Players.LocalPlayer
 
 local comandos = {
     {nome = "/mat", cmd = "/mat", key = nil, vezes = 3},
-    {nome = "/tiro na cabeca", cmd = "/tiro na cabeca", key = nil, vezes = 3},
+    {nome = "/tiro na cabeca - 3", cmd = "/tiro na cabeca", key = nil, vezes = 3},
+    {nome = "/tiro na cabeça - 1", cmd = "/tiro na cabeça", key = nil, vezes = 1},
     {nome = "/tirar comunicacao", cmd = "/tirar comunicacao", key = nil, vezes = 1},
-    {nome = "/render", cmd = "/render", key = nil, vezes = 3},
+    {nome = "/render - 3", cmd = "/render", key = nil, vezes = 3},
+    {nome = "/render - 1", cmd = "/render", key = nil, vezes = 1},
     {nome = "/furar pneu", cmd = "/furar pneu", key = nil, vezes = 3},
     {nome = "/lockpick", cmd = "/lockpick", key = nil, vezes = 1},
     {nome = "/algemar", cmd = "/algemar", key = nil, vezes = 1},
