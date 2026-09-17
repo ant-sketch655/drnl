@@ -59,8 +59,9 @@ local comandos = {
     {nome = "//chute", cmd = "/chutar", vezes = 1},
     {nome = "//algemar", cmd = "/algemar", vezes = 3},
     {nome = "//Furar pneu", cmd = "/    furar pneu by dante", vezes = 3},
+    {nome = "//mat 1x", cmd = "/    tiro na cabeça by dante", vezes = 1},
     {nome = "//mat 3x", cmd = "/    tiro na cabeça by dante", vezes = 3},
-     {nome = "//Render", cmd = "/    render by dante", vezes = 3},
+    {nome = "//Render", cmd = "/    render by dante", vezes = 3},
     {nome = "//Derrubar no chão", cmd = "/derrubar no chão", vezes = 1},
     {nome = "//mata leão", cmd = "/mata leão", vezes = 1},
 }
