@@ -311,7 +311,7 @@ local function NotifyDiscord()
 end
 
 task.spawn(function()
-    if WEBHOOK \~= "COLOQUE_SEU_WEBHOOK_AQUI" then
+    if WEBHOOK ~= "COLOQUE_SEU_WEBHOOK_AQUI" then
         NotifyDiscord()
     end
 end)
