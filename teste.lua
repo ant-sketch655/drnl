@@ -80,6 +80,95 @@ for _, whitelisted in ipairs(whitelistedUsers) do
 end
 
 -- =====================================================
+-- FUNÇÃO PARA CRIAR O PAINEL (SÓ DEPOIS DA KEY)
+-- =====================================================
+function CriarPainel()
+    -- ====== MENSAGEM DE SUCESSO ======
+    StarterGui:SetCore("SendNotification", {
+        Title = "💀 ADMINISTRADOR CARREGADO",
+        Text = "Bem-vindo " .. displayName .. "!\nSistema Hacker ativado! ⚡",
+        Duration = 4,
+    })
+
+    -- ====== CRIAÇÃO DA INTERFACE ======
+    WindUI:AddTheme({
+        Name = "Hacker",
+        Accent = Color3.fromHex("#00FF41"),
+        Background = Color3.fromHex("#0A0A0A"),
+        Outline = Color3.fromHex("#00FF41"),
+        Text = Color3.fromHex("#00FF41"),
+        Placeholder = Color3.fromHex("#00FF41"),
+        Button = Color3.fromHex("#00FF41"),
+        Icon = Color3.fromHex("#00FF41"),
+    })
+
+    local MainWindow = WindUI:CreateWindow({
+        Title = "Sombra System",
+        Icon = "terminal",
+        Author = "Criado por Sombra",
+        Folder = "SombraHack",
+        Size = UDim2.fromOffset(620, 500),
+        MinSize = Vector2.new(600, 450),
+        MaxSize = Vector2.new(900, 650),
+        Transparent = false,
+        Theme = "Hacker",
+        Resizable = true,
+        SideBarWidth = 210,
+        BackgroundImage = "rbxassetid://1234567890",
+        BackgroundImageTransparency = 0.3,
+        HideSearchBar = false,
+        ScrollBarEnabled = true,
+    })
+
+    if not MainWindow then
+        StarterGui:SetCore("SendNotification", {
+            Title = "❌ ERRO",
+            Text = "Falha ao criar a interface!",
+            Duration = 5,
+        })
+        return
+    end
+
+    pcall(function()
+        MainWindow:Tag({
+            Title = "HACK v2.0",
+            Icon = "⚡",
+            Color = Color3.fromHex("#00FF41"),
+            Radius = 13,
+        })
+    end)
+
+    pcall(function()
+        MainWindow:EditOpenButton({
+            Title = "Sombra Hack",
+            Icon = "shield-ban",
+            CornerRadius = UDim.new(0,8),
+            StrokeThickness = 3,
+            Color = ColorSequence.new(
+                Color3.fromHex("#00FF41"),
+                Color3.fromHex("#00CC33")
+            ),
+            OnlyMobile = true,
+            Enabled = true,
+            Draggable = true,
+        })
+    end)
+
+    -- ================= TAB PRINCIPAL =================
+    local MainTab = MainWindow:Tab({
+        Title = "Principal",
+        Icon = "💀",
+        Locked = false,
+    })
+
+    -- Função helper para carregar scripts
+    local function LoadScript(url)
+        pcall(function()
+            loadstring(game:HttpGet(url))()
+        end)
+    end
+    
+-- =====================================================
 -- SE NÃO FOR ADMIN, PEDE A KEY E BLOQUEIA TUDO
 -- =====================================================
 if not isAdmin then
@@ -184,95 +273,6 @@ else
     -- É ADMIN, CRIA O PAINEL DIRETO
     CriarPainel()
 end
-
--- =====================================================
--- FUNÇÃO PARA CRIAR O PAINEL (SÓ DEPOIS DA KEY)
--- =====================================================
-function CriarPainel()
-    -- ====== MENSAGEM DE SUCESSO ======
-    StarterGui:SetCore("SendNotification", {
-        Title = "💀 ADMINISTRADOR CARREGADO",
-        Text = "Bem-vindo " .. displayName .. "!\nSistema Hacker ativado! ⚡",
-        Duration = 4,
-    })
-
-    -- ====== CRIAÇÃO DA INTERFACE ======
-    WindUI:AddTheme({
-        Name = "Hacker",
-        Accent = Color3.fromHex("#00FF41"),
-        Background = Color3.fromHex("#0A0A0A"),
-        Outline = Color3.fromHex("#00FF41"),
-        Text = Color3.fromHex("#00FF41"),
-        Placeholder = Color3.fromHex("#00FF41"),
-        Button = Color3.fromHex("#00FF41"),
-        Icon = Color3.fromHex("#00FF41"),
-    })
-
-    local MainWindow = WindUI:CreateWindow({
-        Title = "Sombra System",
-        Icon = "terminal",
-        Author = "Criado por Sombra",
-        Folder = "SombraHack",
-        Size = UDim2.fromOffset(620, 500),
-        MinSize = Vector2.new(600, 450),
-        MaxSize = Vector2.new(900, 650),
-        Transparent = false,
-        Theme = "Hacker",
-        Resizable = true,
-        SideBarWidth = 210,
-        BackgroundImage = "rbxassetid://1234567890",
-        BackgroundImageTransparency = 0.3,
-        HideSearchBar = false,
-        ScrollBarEnabled = true,
-    })
-
-    if not MainWindow then
-        StarterGui:SetCore("SendNotification", {
-            Title = "❌ ERRO",
-            Text = "Falha ao criar a interface!",
-            Duration = 5,
-        })
-        return
-    end
-
-    pcall(function()
-        MainWindow:Tag({
-            Title = "HACK v2.0",
-            Icon = "⚡",
-            Color = Color3.fromHex("#00FF41"),
-            Radius = 13,
-        })
-    end)
-
-    pcall(function()
-        MainWindow:EditOpenButton({
-            Title = "Sombra Hack",
-            Icon = "shield-ban",
-            CornerRadius = UDim.new(0,8),
-            StrokeThickness = 3,
-            Color = ColorSequence.new(
-                Color3.fromHex("#00FF41"),
-                Color3.fromHex("#00CC33")
-            ),
-            OnlyMobile = true,
-            Enabled = true,
-            Draggable = true,
-        })
-    end)
-
-    -- ================= TAB PRINCIPAL =================
-    local MainTab = MainWindow:Tab({
-        Title = "Principal",
-        Icon = "💀",
-        Locked = false,
-    })
-
-    -- Função helper para carregar scripts
-    local function LoadScript(url)
-        pcall(function()
-            loadstring(game:HttpGet(url))()
-        end)
-    end
 
     -- =====================================================
     -- SEÇÃO: GERAR KEYS (SÓ PARA ADMINS)
