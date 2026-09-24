@@ -175,7 +175,7 @@ if not isAdmin then
     -- Cria uma interface simples com input
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "KeyInput"
-    screenGui.Parent = game:GetService("CoreGui")
+    screenGui.Parent = player:WaitForChild("PlayerGui")
     
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 400, 0, 200)
