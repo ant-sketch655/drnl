@@ -65,7 +65,7 @@ end
 
 -- ====== SISTEMA DE WHITELIST (SÓ ADMINS) ======
 local whitelistedUsers = {
-    "theusruff67",
+    "itz_leoleo54",
 }
 
 -- ====== VERIFICAÇÃO ======
