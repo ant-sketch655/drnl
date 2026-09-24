@@ -1,5 +1,5 @@
 -- ====== SCRIPT ADMINISTRADOR HACKER COM INPUTBOX ======
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footageus/WindUI/main/loadstring.lua"))()
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 -- Verificação do WindUI
 if not WindUI then
