@@ -1,5 +1,4 @@
--- AUTO WALLHOP, By - dantexx + Toggle Button + Botão FLICK (igual ao seu print)
--- Grok Imagine ativado + SuperGrok Dedicado (ERRO TOTALMENTE CORRIGIDO)
+-- AUTO WALLHOP, By - dantexx 
 
 local Players    = game:GetService("Players")
 local RunService = game:GetService("RunService")
