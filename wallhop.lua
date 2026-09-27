@@ -1,5 +1,5 @@
--- Auto Wallhop 
--- By - dantexx 
+-- AUTO WALLHOP + TOGGLE VISUAL + BOTÃO FLICK (igual ao seu screenshot)
+-- By - dantexx + Grok Imagine ativado
 
 local Players    = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -157,7 +157,7 @@ UserInputService.InputBegan:Connect(function(input)
 	end
 end)
 
--- ==================== BOTÃO VISUAL FLICK (igual ao seu screenshot) ====================
+-- ==================== BOTÃO VISUAL FLICK (igual ao seu print) ====================
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "WallhopFlick"
 ScreenGui.ResetOnSpawn = false
@@ -165,7 +165,7 @@ ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
 local MainFrame = Instance.new("Frame")
 MainFrame.Size = UDim2.new(0, 180, 0, 60)
-MainFrame.Position = UDim2.new(0.5, -90, 1, -90) -- embaixo, centralizado
+MainFrame.Position = UDim2.new(0.5, -90, 1, -90)
 MainFrame.BackgroundTransparency = 0.1
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
@@ -178,7 +178,7 @@ Corner.Parent = MainFrame
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 1, 0)
 Title.BackgroundTransparency = 1
-Title.Text = "FLICK"
+Title.Text = "wallhop"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextScaled = true
 Title.Font = Enum.Font.GothamBold
@@ -190,7 +190,12 @@ RunService.RenderStepped:Connect(function(dt)
 
 	updateFlick(dt)
 
-	if not toggleEnabled then return end
+	if not toggleEnabled then 
+		MainFrame.Visible = false
+		return 
+	end
+	MainFrame.Visible = true
+
 	if flick.active then return end
 	if os.clock() - lastJumpTime < getgenv().Wallhop_Config.jumpCooldown then return end
 
@@ -206,4 +211,4 @@ RunService.RenderStepped:Connect(function(dt)
 	humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 end)
 
-print("🎮 Wallhop carregado! F1 = ligar/desligar | Botão FLICK visual aparece na tela (igual ao seu screenshot)")
+print("🎮 Wallhop carregado! F1 = ligar/desligar | Botão FLICK visual aparece na tela (igual ao seu print)")
