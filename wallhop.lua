@@ -1,5 +1,5 @@
--- AUTO WALLHOP + TOGGLE VISUAL + BOTÃO FLICK (igual ao seu screenshot)
--- By - dantexx + Grok Imagine ativado
+-- AUTO WALLHOP
+-- By - dantexx
 
 local Players    = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -42,6 +42,7 @@ local function getYaw(cf) local l = cf.LookVector return math.atan2(-l.X, -l.Z) 
 local function smoothstep(s) s = math.clamp(s, 0, 1) return s * s * (3 - 2 * s) end
 
 local function setYawAbsolute(yaw)
+	if not hrp then return end
 	local cf, pos = hrp.CFrame, hrp.CFrame.Position
 	local delta = normalizeAngle(yaw - getYaw(cf))
 	if math.abs(delta) < 1e-4 then return end
@@ -52,6 +53,7 @@ local function setYawAbsolute(yaw)
 end
 
 local function getFeetY()
+	if not hrp or not humanoid then return 0 end
 	return hrp.Position.Y - hrp.Size.Y * 0.5 - (humanoid.HipHeight or 0)
 end
 
@@ -62,6 +64,7 @@ local function isWallHit(result)
 end
 
 local function findSeam()
+	if not hrp then return false end
 	local origin = hrp.Position
 	local feetY  = getFeetY()
 	local halfBand = getgenv().Wallhop_Config.sampleBand
@@ -178,7 +181,7 @@ Corner.Parent = MainFrame
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 1, 0)
 Title.BackgroundTransparency = 1
-Title.Text = "wallhop"
+Title.Text = "FLICK"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextScaled = true
 Title.Font = Enum.Font.GothamBold
