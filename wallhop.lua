@@ -1,4 +1,4 @@
--- AUTO WALLHOP - By dantexx (Corrigido para Delta Executor)
+-- AUTO WALLHOP - By dantexx (Corrigido com Botão de Status ON/OFF)
 -- Grok Imagine ativado + SuperGrok Dedicado
 
 local Players    = game:GetService("Players")
@@ -6,7 +6,6 @@ local RunService = game:GetService("RunService")
 local Workspace  = game:GetService("Workspace")
 local UserInputService = game:GetService("UserInputService")
 
--- CORREÇÃO 1: Usar variável local em vez de getgenv() para evitar nil value
 local Config = {
 	wallCheckDistance = 2.5,
 	jumpCooldown      = 0.3,
@@ -32,7 +31,6 @@ do
 	rayParams.IgnoreWater = true
 end
 
--- CORREÇÃO 2: Inicialização segura das direções
 local RAY_DIRS = {}
 for i = 0, Config.directions - 1 do
 	local a = (i / Config.directions) * math.pi * 2
@@ -66,7 +64,6 @@ local function isWallHit(result)
 end
 
 local function findSeam()
-	-- CORREÇÃO 3: Garantir que hrp existe antes de usar
 	if not hrp then return false end
 	
 	local origin = hrp.Position
@@ -144,12 +141,48 @@ end
 player.CharacterAdded:Connect(onCharacter)
 if player.Character then onCharacter(player.Character) end
 
--- ==================== TOGGLE BUTTON (F1) ====================
-local toggleEnabled = Config.autoWallHop
+-- ==================== BOTÃO VISUAL CLICÁVEL (FLICK ON/OFF) ====================
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "WallhopFlick"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
+local MainButton = Instance.new("TextButton")
+MainButton.Size = UDim2.new(0, 110, 0, 40) -- Aumentei um pouco a largura para caber "FLICK/OFF"
+MainButton.Position = UDim2.new(1, -120, 1, -60) -- Posição canto inferior direito
+MainButton.BackgroundTransparency = 0.2
+MainButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- Cinza escuro inicial
+MainButton.BorderSizePixel = 0
+MainButton.Text = "FLICK/OFF"
+MainButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+MainButton.TextScaled = true
+MainButton.Font = Enum.Font.GothamBold
+MainButton.Parent = ScreenGui
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 8)
+Corner.Parent = MainButton
+
+-- Variável de estado
+local toggleEnabled = false
+Config.autoWallHop = false -- Começa desligado para combinar com o botão
+
+-- Função para atualizar o visual do botão
+local function updateButtonVisual()
+	if toggleEnabled then
+		MainButton.Text = "FLICK/ON"
+		MainButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0) -- Verde quando ligado
+	else
+		MainButton.Text = "FLICK/OFF"
+		MainButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- Cinza escuro quando desligado
+	end
+end
+
+-- Função de alternar
 local function toggleScript()
 	toggleEnabled = not toggleEnabled
 	Config.autoWallHop = toggleEnabled
+	updateButtonVisual()
 
 	if toggleEnabled then
 		print("✅ AUTO WALLHOP LIGADO")
@@ -158,55 +191,35 @@ local function toggleScript()
 	end
 end
 
+-- Inicializa o botão com o estado correto
+updateButtonVisual()
+
+-- Clique do botão
+MainButton.MouseButton1Click:Connect(function()
+	toggleScript()
+end)
+
+-- Atalho F1 (opcional, caso queira usar o teclado também)
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-	if gameProcessed then return end -- Evita ativar quando estiver digitando no chat
+	if gameProcessed then return end
 	if input.KeyCode == Enum.KeyCode.F1 then
 		toggleScript()
 	end
 end)
 
--- ==================== BOTÃO VISUAL FLICK ====================
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "WallhopFlick"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = player:WaitForChild("PlayerGui")
-
-local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 180, 0, 60)
-MainFrame.Position = UDim2.new(0.5, -90, 1, -90)
-MainFrame.BackgroundTransparency = 0.1
-MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-MainFrame.BorderSizePixel = 0
-MainFrame.Parent = ScreenGui
-
-local Corner = Instance.new("UICorner")
-Corner.CornerRadius = UDim.new(1, 0)
-Corner.Parent = MainFrame
-
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 1, 0)
-Title.BackgroundTransparency = 1
-Title.Text = "FLICK"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextScaled = true
-Title.Font = Enum.Font.GothamBold
-Title.Parent = MainFrame
-
 -- ==================== LOOP PRINCIPAL ====================
 RunService.RenderStepped:Connect(function(dt)
-	-- CORREÇÃO 4: Verificação rigorosa para não quebrar o script
 	if not hrp or not humanoid or humanoid.Health <= 0 then 
-		if MainFrame then MainFrame.Visible = false end
+		MainButton.Visible = false
 		return 
 	end
 
+	MainButton.Visible = true
 	updateFlick(dt)
 
 	if not toggleEnabled then 
-		MainFrame.Visible = false
 		return 
 	end
-	MainFrame.Visible = true
 
 	if flick.active then return end
 	if os.clock() - lastJumpTime < Config.jumpCooldown then return end
@@ -223,4 +236,4 @@ RunService.RenderStepped:Connect(function(dt)
 	humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 end)
 
-print("🎮 Wallhop carregado! F1 = ligar/desligar | Botão FLICK visual")
+print("🎮 Wallhop carregado! Botão FLICK/ON e FLICK/OFF na tela | F1 também funciona")
