@@ -1,12 +1,13 @@
--- AUTO WALLHOP, By - dantexx + Toggle Button + Botão FLICK (igual ao seu print)
--- Grok Imagine ativado + SuperGrok Dedicado (ERRO TOTALMENTE CORRIGIDO)
+-- AUTO WALLHOP - By dantexx (Corrigido para Delta Executor)
+-- Grok Imagine ativado + SuperGrok Dedicado
 
 local Players    = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Workspace  = game:GetService("Workspace")
 local UserInputService = game:GetService("UserInputService")
 
-getgenv().Wallhop_Config = {
+-- CORREÇÃO 1: Usar variável local em vez de getgenv() para evitar nil value
+local Config = {
 	wallCheckDistance = 2.5,
 	jumpCooldown      = 0.3,
 	flickAngle        = 60,
@@ -31,9 +32,10 @@ do
 	rayParams.IgnoreWater = true
 end
 
+-- CORREÇÃO 2: Inicialização segura das direções
 local RAY_DIRS = {}
-for i = 0, getgenv().Wallhop_Config.directions - 1 do
-	local a = (i / getgenv().Wallhop_Config.directions) * math.pi * 2
+for i = 0, Config.directions - 1 do
+	local a = (i / Config.directions) * math.pi * 2
 	RAY_DIRS[i + 1] = Vector3.new(math.cos(a), 0, math.sin(a))
 end
 
@@ -59,16 +61,18 @@ end
 
 local function isWallHit(result)
 	if not result or not result.Instance or not result.Instance.CanCollide then return false end
-	if getgenv().Wallhop_Config.requireVertical and math.abs(result.Normal.Y) >= 0.35 then return false end
+	if Config.requireVertical and math.abs(result.Normal.Y) >= 0.35 then return false end
 	return true
 end
 
 local function findSeam()
+	-- CORREÇÃO 3: Garantir que hrp existe antes de usar
 	if not hrp then return false end
+	
 	local origin = hrp.Position
 	local feetY  = getFeetY()
-	local halfBand = getgenv().Wallhop_Config.sampleBand
-	local n        = getgenv().Wallhop_Config.sampleCount
+	local halfBand = Config.sampleBand
+	local n        = Config.sampleCount
 	local step     = (halfBand * 2) / (n - 1)
 
 	for _, dir in ipairs(RAY_DIRS) do
@@ -76,13 +80,13 @@ local function findSeam()
 		for k = 1, n do
 			local y = feetY - halfBand + step * (k - 1)
 			local o = Vector3.new(origin.X, y, origin.Z)
-			local r = Workspace:Raycast(o, dir * getgenv().Wallhop_Config.wallCheckDistance, rayParams)
+			local r = Workspace:Raycast(o, dir * Config.wallCheckDistance, rayParams)
 
 			if isWallHit(r) then
 				local part = r.Instance
-				if prevPart and part \~= prevPart then
+				if prevPart and part ~= prevPart then
 					local seamY = (prevY + y) * 0.5
-					if math.abs(seamY - feetY) <= getgenv().Wallhop_Config.seamTolerance then
+					if math.abs(seamY - feetY) <= Config.seamTolerance then
 						return true
 					end
 				end
@@ -97,7 +101,7 @@ local function findSeam()
 end
 
 local function startFlick()
-	if flick.active then return end
+	if flick.active or not hrp or not humanoid then return end
 	flick.active  = true
 	flick.t       = 0
 	flick.baseYaw = getYaw(hrp.CFrame)
@@ -105,10 +109,10 @@ local function startFlick()
 end
 
 local function updateFlick(dt)
-	if not flick.active then return end
+	if not flick.active or not hrp or not humanoid then return end
 	flick.t = flick.t + dt
-	local a = math.clamp(flick.t / getgenv().Wallhop_Config.flickDuration, 0, 1)
-	local angle = math.rad(getgenv().Wallhop_Config.flickAngle)
+	local a = math.clamp(flick.t / Config.flickDuration, 0, 1)
+	local angle = math.rad(Config.flickAngle)
 
 	local offset
 	if a < 1/3 then
@@ -124,7 +128,7 @@ local function updateFlick(dt)
 	if a >= 1 then
 		flick.active = false
 		setYawAbsolute(flick.baseYaw)
-		humanoid.AutoRotate = true
+		if humanoid then humanoid.AutoRotate = true end
 	end
 end
 
@@ -141,26 +145,27 @@ player.CharacterAdded:Connect(onCharacter)
 if player.Character then onCharacter(player.Character) end
 
 -- ==================== TOGGLE BUTTON (F1) ====================
-local toggleEnabled = getgenv().Wallhop_Config.autoWallHop
+local toggleEnabled = Config.autoWallHop
 
 local function toggleScript()
 	toggleEnabled = not toggleEnabled
-	getgenv().Wallhop_Config.autoWallHop = toggleEnabled
+	Config.autoWallHop = toggleEnabled
 
 	if toggleEnabled then
-		print("✅ AUTO WALLHOP LIGADO (Heavy Mode)")
+		print("✅ AUTO WALLHOP LIGADO")
 	else
 		print("❌ AUTO WALLHOP DESLIGADO")
 	end
 end
 
-UserInputService.InputBegan:Connect(function(input)
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end -- Evita ativar quando estiver digitando no chat
 	if input.KeyCode == Enum.KeyCode.F1 then
 		toggleScript()
 	end
 end)
 
--- ==================== BOTÃO VISUAL FLICK (igual ao seu print) ====================
+-- ==================== BOTÃO VISUAL FLICK ====================
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "WallhopFlick"
 ScreenGui.ResetOnSpawn = false
@@ -187,9 +192,13 @@ Title.TextScaled = true
 Title.Font = Enum.Font.GothamBold
 Title.Parent = MainFrame
 
--- ==================== LOOP ====================
+-- ==================== LOOP PRINCIPAL ====================
 RunService.RenderStepped:Connect(function(dt)
-	if not hrp or not humanoid or humanoid.Health <= 0 then return end
+	-- CORREÇÃO 4: Verificação rigorosa para não quebrar o script
+	if not hrp or not humanoid or humanoid.Health <= 0 then 
+		if MainFrame then MainFrame.Visible = false end
+		return 
+	end
 
 	updateFlick(dt)
 
@@ -200,9 +209,9 @@ RunService.RenderStepped:Connect(function(dt)
 	MainFrame.Visible = true
 
 	if flick.active then return end
-	if os.clock() - lastJumpTime < getgenv().Wallhop_Config.jumpCooldown then return end
+	if os.clock() - lastJumpTime < Config.jumpCooldown then return end
 
-	if humanoid.FloorMaterial \~= Enum.Material.Air then return end
+	if humanoid.FloorMaterial ~= Enum.Material.Air then return end
 
 	local state = humanoid:GetState()
 	if state == Enum.HumanoidStateType.Climbing or state == Enum.HumanoidStateType.Swimming then return end
@@ -214,4 +223,4 @@ RunService.RenderStepped:Connect(function(dt)
 	humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 end)
 
-print("🎮 Wallhop carregado! F1 = ligar/desligar | Botão FLICK visual aparece na tela (igual ao seu print)")
+print("🎮 Wallhop carregado! F1 = ligar/desligar | Botão FLICK visual")
