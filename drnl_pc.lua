@@ -1,4 +1,5 @@
 -- DRNL Keybinds - Bolinha no canto superior direito
+-- Adicionado: Aperte P para sumir/reaparecer a bolinha (keybinds continuam)
 
 print("=== INICIANDO SCRIPT ===")
 
@@ -19,21 +20,6 @@ local comandos = {
 }
 
 local waitingForKey = nil
-
-local function enviar(cmd, vezes)
-    for i = 1, (vezes or 1) do
-        pcall(function()
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
-        end)
-        pcall(function()
-            local tcs = game:GetService("TextChatService")
-            local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
-            if channel then
-                channel:SendAsync(cmd)
-            end
-        end)
-    end
-end
 
 -- GUI
 local gui = Instance.new("ScreenGui")
@@ -134,10 +120,10 @@ close.MouseButton1Click:Connect(function()
     main.Visible = false
 end)
 
--- Bolinha no lugar marcado (canto superior direito)
+-- Bolinha no canto superior direito
 local bolinha = Instance.new("TextButton")
 bolinha.Size = UDim2.new(0, 42, 0, 42)
-bolinha.Position = UDim2.new(1, -70, 0, 8) -- Posição marcada na imagem
+bolinha.Position = UDim2.new(1, -70, 0, 8)
 bolinha.BackgroundColor3 = Color3.fromRGB(0, 120, 70)
 bolinha.Text = "⌨"
 bolinha.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -150,7 +136,13 @@ bolinha.MouseButton1Click:Connect(function()
     main.Visible = not main.Visible
 end)
 
+-- Tecla P para sumir/reaparecer a bolinha
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if input.KeyCode == Enum.KeyCode.P then
+        bolinha.Visible = not bolinha.Visible
+        return
+    end
+
     if waitingForKey and input.UserInputType == Enum.UserInputType.Keyboard then
         local i = waitingForKey
         comandos[i].key = input.KeyCode
@@ -171,4 +163,4 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 print("=== SCRIPT CARREGADO ===")
-print("Bolinha no canto superior direito")
+print("Bolinha toggle com P (sumir/reaparecer) | Keybinds continuam funcionando")
