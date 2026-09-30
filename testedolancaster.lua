@@ -15,7 +15,7 @@ local function createGui()
     local Title = Instance.new("TextLabel")
     Title.Size = UDim2.new(1, 0, 1, 0)
     Title.BackgroundTransparency = 1
-    Title.Text = "⚽️ CONDUÇÃO DO LANCASTER ⚽️"
+    Title.Text = "⚽️ CONDUÇÃO ⚽️"
     Title.TextColor3 = Color3.fromRGB(0, 255, 100)
     Title.TextScaled = true
     Title.Font = Enum.Font.GothamBold
