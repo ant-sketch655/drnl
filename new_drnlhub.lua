@@ -1,4 +1,4 @@
--- DRNL HUB RP (bolinha fixa igual ao de PC)
+
 
 print("=== INICIANDO DRNL HUB RP ===")
 
@@ -55,14 +55,12 @@ title.Parent = main
 Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 
 local comandos = {
-    {nome = "//armar c4", cmd = "//Armar C4", vezes = 1},
-    {nome = "//ativar c4", cmd = "//Ativar C4", vezes = 1},
+    {nome = "//mat 3x", cmd = "/TIRO NA CABEÇA", vezes = 3},
     {nome = "//mat", cmd = "/TIRO NA CABEÇA", vezes = 1},
-    {nome = "//Furar pneu", cmd = "//Furar pneu", vezes = 1},
-    {nome = "//mat 3x", cmd = "//TIRO NA CABEÇA", vezes = 3},
-    {nome = "//Derrubar no chão", cmd = "//Derrubar no chão", vezes = 1},
+    {nome = "//Furar pneu", cmd = "//Furar pneu = 1},
+    {nome = "//Furar pneu 3x", cmd = "//Furar pneu", vezes = 3},
     {nome = "//Render", cmd = "//Render", vezes = 1},
-    {nome = "//mata leão", cmd = "//Mata leão", vezes = 1},
+    {nome = "//Render 3x", cmd = "//Render", vezes = 3},
 }
 
 local function enviar(cmd, vezes)
@@ -104,7 +102,6 @@ for i, v in ipairs(comandos) do
     end)
 end
 
--- Bolinha FIXA no mesmo lugar do script de PC (canto superior direito)
 local bolinha = Instance.new("TextButton")
 bolinha.Size = UDim2.new(0, 42, 0, 42)
 bolinha.Position = UDim2.new(1, -70, 0, 8) -- Mesma posição do PC
