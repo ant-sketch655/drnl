@@ -57,8 +57,8 @@ Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 local comandos = {
     {nome = "//soco", cmd = "/soco", vezes = 1},
     {nome = "//chute", cmd = "/chutar", vezes = 1},
-    {nome = "//algemar", cmd = "/algemar", vezes = 3},
-    {nome = "//Furar pneu", cmd = "/        furar pneu by ???", vezes = 3},
+    {nome = "//algemar", cmd = "/algemar", vezes = 1},
+    {nome = "//Furar pneu", cmd = "/        furar pneu by ???", vezes = 4},
     {nome = "//mat 1x", cmd = "/        tiro na cabeça by ???", vezes = 1},
     {nome = "//mat 3x", cmd = "/        tiro na cabeça by ???", vezes = 3},
     {nome = "//Render", cmd = "/        render by ???", vezes = 3},
@@ -66,19 +66,29 @@ local comandos = {
     {nome = "//mata leão", cmd = "/mata leão", vezes = 1},
 }
 
+-- ✅ COOLDOWN entre cada repetição do 3x
+local COOLDOWN = 0.5
+
 local function enviar(cmd, vezes)
-    for i = 1, (vezes or 1) do
-        pcall(function()
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
-        end)
-        pcall(function()
-            local tcs = game:GetService("TextChatService")
-            local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
-            if channel then
-                channel:SendAsync(cmd)
+    vezes = vezes or 1
+    task.spawn(function()
+        for i = 1, vezes do
+            pcall(function()
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
+            end)
+            pcall(function()
+                local tcs = game:GetService("TextChatService")
+                local channel = tcs.TextChannels:FindFirstChild("RBXGeneral")
+                if channel then
+                    channel:SendAsync(cmd)
+                end
+            end)
+            -- Só espera se ainda houver mais envios
+            if i < vezes then
+                task.wait(COOLDOWN)
             end
-        end)
-    end
+        end
+    end)
 end
 
 for i, v in ipairs(comandos) do
