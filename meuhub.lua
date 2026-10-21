@@ -58,16 +58,16 @@ local comandos = {
     {nome = "//soco", cmd = "/soco", vezes = 1},
     {nome = "//chute", cmd = "/chutar", vezes = 1},
     {nome = "//algemar", cmd = "/algemar", vezes = 1},
-    {nome = "//Furar pneu", cmd = "/        furar pneu by ???", vezes = 4},
-    {nome = "//mat 1x", cmd = "/        tiro na cabeça by ???", vezes = 1},
-    {nome = "//mat 3x", cmd = "/        tiro na cabeça by ???", vezes = 3},
-    {nome = "//Render", cmd = "/        render by ???", vezes = 3},
+    {nome = "//Furar pneu", cmd = "/furar pneu", vezes = 4},
+    {nome = "//mat 1x", cmd = "/mat", vezes = 1},
+    {nome = "//mat 3x", cmd = "/mat", vezes = 3},
+    {nome = "//Render", cmd = "/render", vezes = 3},
     {nome = "//Derrubar no chão", cmd = "/derrubar no chão", vezes = 1},
     {nome = "//mata leão", cmd = "/mata leão", vezes = 1},
 }
 
 -- ✅ COOLDOWN entre cada repetição do 3x
-local COOLDOWN = 0.5
+local COOLDOWN = 0.3
 
 local function enviar(cmd, vezes)
     vezes = vezes or 1
