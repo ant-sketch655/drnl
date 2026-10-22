@@ -1,5 +1,5 @@
 -- ============================================================
--- STARK COMBAT HUB — WINDUI EDITION (MOBILE CLICK FIX 2)
+-- STARK COMBAT HUB — WINDUI + FLY + MOBILE FIX
 -- ============================================================
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
@@ -9,6 +9,7 @@ local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
+local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -16,6 +17,8 @@ local playerGui = player:WaitForChild("PlayerGui")
 local CYAN = Color3.fromRGB(0, 200, 255)
 local WHITE = Color3.fromRGB(235, 245, 255)
 local BG = Color3.fromRGB(10, 16, 25)
+local COR_BOTAO = Color3.fromRGB(22, 22, 22)
+local COR_PROPULSOR = CYAN
 
 local function corner(obj, radius)
     local c = Instance.new("UICorner")
@@ -24,7 +27,7 @@ local function corner(obj, radius)
 end
 
 -- ============================================================
--- SISTEMA DE CHAT (DUPLO)
+-- SISTEMA DE CHAT
 -- ============================================================
 local function enviar(cmd)
     task.spawn(function()
@@ -36,7 +39,6 @@ local function enviar(cmd)
                 success = true
             end
         end)
-        
         if not success then
             pcall(function()
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(cmd, "All")
@@ -193,7 +195,7 @@ local function toggleHUD(state)
         line.Parent = scanContainer
     end
 
-    -- Brackets (Cantos)
+    -- Brackets
     local bracketSize = 80
     local bracketThick = 3
     for _, corner in ipairs({
@@ -224,7 +226,7 @@ local function toggleHUD(state)
         v.Parent = container
     end
 
-    -- Retículo Central
+    -- Retículo
     local reticle = Instance.new("Frame")
     reticle.Size = UDim2.new(0, 160, 0, 160)
     reticle.Position = UDim2.new(0.5, -80, 0.5, -80)
@@ -258,7 +260,7 @@ local function toggleHUD(state)
         bar.Parent = reticle
     end
 
-    -- Painel Esquerdo
+    -- Painéis
     local leftPanel = Instance.new("Frame")
     leftPanel.Size = UDim2.new(0, 220, 0, 140)
     leftPanel.Position = UDim2.new(0, 40, 0.5, -70)
@@ -267,24 +269,7 @@ local function toggleHUD(state)
     leftPanel.BorderSizePixel = 0
     leftPanel.ZIndex = 5
     leftPanel.Parent = armorGui
-    local lpStroke = Instance.new("UIStroke")
-    lpStroke.Color = CYAN
-    lpStroke.Thickness = 1
-    lpStroke.Transparency = 0.3
-    lpStroke.Parent = leftPanel
-    local leftTitle = Instance.new("TextLabel")
-    leftTitle.Size = UDim2.new(1,-10,0,20)
-    leftTitle.Position = UDim2.new(0,5,0,5)
-    leftTitle.BackgroundTransparency = 1
-    leftTitle.Text = "» SUIT STATUS"
-    leftTitle.TextColor3 = CYAN
-    leftTitle.TextXAlignment = Enum.TextXAlignment.Left
-    leftTitle.Font = Enum.Font.Code
-    leftTitle.TextSize = 12
-    leftTitle.ZIndex = 6
-    leftTitle.Parent = leftPanel
     local leftInfo = Instance.new("TextLabel")
-    leftInfo.Name = "Info"
     leftInfo.Size = UDim2.new(1,-10,1,-30)
     leftInfo.Position = UDim2.new(0,5,0,25)
     leftInfo.BackgroundTransparency = 1
@@ -296,7 +281,6 @@ local function toggleHUD(state)
     leftInfo.ZIndex = 6
     leftInfo.Parent = leftPanel
 
-    -- Painel Direito
     local rightPanel = Instance.new("Frame")
     rightPanel.Size = UDim2.new(0, 220, 0, 140)
     rightPanel.Position = UDim2.new(1, -260, 0.5, -70)
@@ -305,24 +289,7 @@ local function toggleHUD(state)
     rightPanel.BorderSizePixel = 0
     rightPanel.ZIndex = 5
     rightPanel.Parent = armorGui
-    local rpStroke = Instance.new("UIStroke")
-    rpStroke.Color = CYAN
-    rpStroke.Thickness = 1
-    rpStroke.Transparency = 0.3
-    rpStroke.Parent = rightPanel
-    local rightTitle = Instance.new("TextLabel")
-    rightTitle.Size = UDim2.new(1,-10,0,20)
-    rightTitle.Position = UDim2.new(0,5,0,5)
-    rightTitle.BackgroundTransparency = 1
-    rightTitle.Text = "» TARGETING"
-    rightTitle.TextColor3 = CYAN
-    rightTitle.TextXAlignment = Enum.TextXAlignment.Left
-    rightTitle.Font = Enum.Font.Code
-    rightTitle.TextSize = 12
-    rightTitle.ZIndex = 6
-    rightTitle.Parent = rightPanel
     local rightInfo = Instance.new("TextLabel")
-    rightInfo.Name = "Info"
     rightInfo.Size = UDim2.new(1,-10,1,-30)
     rightInfo.Position = UDim2.new(0,5,0,25)
     rightInfo.BackgroundTransparency = 1
@@ -333,34 +300,6 @@ local function toggleHUD(state)
     rightInfo.TextSize = 11
     rightInfo.ZIndex = 6
     rightInfo.Parent = rightPanel
-
-    -- Barras
-    local topBar = Instance.new("TextLabel")
-    topBar.Name = "TopBar"
-    topBar.Size = UDim2.new(0, 500, 0, 26)
-    topBar.Position = UDim2.new(0.5, -250, 0, 20)
-    topBar.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
-    topBar.BackgroundTransparency = 0.5
-    topBar.BorderSizePixel = 0
-    topBar.Text = "A.R.I.A. // MARK VII // ONLINE"
-    topBar.TextColor3 = CYAN
-    topBar.Font = Enum.Font.Code
-    topBar.TextSize = 13
-    topBar.ZIndex = 6
-    topBar.Parent = armorGui
-
-    local bottomBar = Instance.new("TextLabel")
-    bottomBar.Name = "BottomBar"
-    bottomBar.Size = UDim2.new(0, 500, 0, 26)
-    bottomBar.Position = UDim2.new(0.5, -250, 1, -46)
-    bottomBar.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
-    bottomBar.BackgroundTransparency = 0.5
-    bottomBar.BorderSizePixel = 0
-    bottomBar.TextColor3 = CYAN
-    bottomBar.Font = Enum.Font.Code
-    bottomBar.TextSize = 12
-    bottomBar.ZIndex = 6
-    bottomBar.Parent = armorGui
 
     -- Atualização
     task.spawn(function()
@@ -385,30 +324,250 @@ local function toggleHUD(state)
                         40
                     )
                 end
-                if bottomBar and bottomBar.Parent then
-                    local t = os.date("*t")
-                    bottomBar.Text = string.format("MARK VII | %02d:%02d:%02d | STARK INDUSTRIES", t.hour, t.min, t.sec)
-                end
             end
-        end
-    end)
-
-    -- Rotação
-    task.spawn(function()
-        local angle = 0
-        while armorGui and armorGui.Parent and reticle and reticle.Parent do
-            task.wait(0.05)
-            angle = (angle + 1) % 360
-            circle.Rotation = angle
         end
     end)
 end
 
 -- ============================================================
--- PAINEL DE COMBATE FLUTUANTE (FIX MOBILE CLIQUE)
+-- SISTEMA DE VOO (FLY) DO HOMEM DE FERRO
+-- ============================================================
+local tela = Instance.new("ScreenGui")
+tela.Name = "StarkFlyUI"
+tela.ResetOnSpawn = false
+tela.Parent = playerGui
+
+local flyAtivo = false
+local boostAtivo = false
+local flyBV, flyBG, conexaoRender
+local flyParticles, flyLight, flyTrail
+
+local INCLINACAO_NORMAL = math.rad(-15)
+local INCLINACAO_BOOST = math.rad(-40)
+local VELOCIDADE_INCLIN = 0.1
+local FORCA_VERTICAL = 1.5
+local VELOCIDADE = 50
+local VELOCIDADE_BOOST = 120
+local SUAVIDADE = 0.2
+
+local btnFly = Instance.new("TextButton")
+btnFly.Size = UDim2.new(0, 60, 0, 60)
+btnFly.Position = UDim2.new(0, 20, 1, -200)
+btnFly.BackgroundColor3 = COR_BOTAO
+btnFly.BorderSizePixel = 0
+btnFly.Text = "FLY"
+btnFly.TextColor3 = COR_PROPULSOR
+btnFly.Font = Enum.Font.Code
+btnFly.TextSize = 16
+btnFly.AutoButtonColor = false
+btnFly.Parent = tela
+corner(btnFly, 30)
+local flyStroke = Instance.new("UIStroke")
+flyStroke.Color = COR_PROPULSOR
+flyStroke.Thickness = 2
+flyStroke.Parent = btnFly
+
+local btnBoost = Instance.new("TextButton")
+btnBoost.Size = UDim2.new(0, 50, 0, 50)
+btnBoost.Position = UDim2.new(0, 30, 1, -270)
+btnBoost.BackgroundColor3 = COR_BOTAO
+btnBoost.BorderSizePixel = 0
+btnBoost.Text = "⚡"
+btnBoost.TextColor3 = COR_PROPULSOR
+btnBoost.Font = Enum.Font.Code
+btnBoost.TextSize = 22
+btnBoost.AutoButtonColor = false
+btnBoost.Visible = false
+btnBoost.Parent = tela
+corner(btnBoost, 25)
+local boostStroke = Instance.new("UIStroke")
+boostStroke.Color = COR_PROPULSOR
+boostStroke.Thickness = 1.5
+boostStroke.Parent = btnBoost
+
+local statusFlyLbl = Instance.new("TextLabel")
+statusFlyLbl.Size = UDim2.new(0, 160, 0, 26)
+statusFlyLbl.Position = UDim2.new(0, 20, 1, -110)
+statusFlyLbl.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
+statusFlyLbl.BackgroundTransparency = 0.3
+statusFlyLbl.BorderSizePixel = 0
+statusFlyLbl.Text = "⚡ OFFLINE"
+statusFlyLbl.TextColor3 = COR_PROPULSOR
+statusFlyLbl.Font = Enum.Font.Code
+statusFlyLbl.TextSize = 13
+statusFlyLbl.Parent = tela
+corner(statusFlyLbl, 6)
+local statusFlyStroke = Instance.new("UIStroke")
+statusFlyStroke.Color = COR_PROPULSOR
+statusFlyStroke.Thickness = 1
+statusFlyStroke.Transparency = 0.5
+statusFlyStroke.Parent = statusFlyLbl
+
+local function criarEfeitosFly(hrp)
+    local attachment = Instance.new("Attachment")
+    attachment.Name = "IronMan_Thruster"
+    attachment.Position = Vector3.new(0, -2.8, 0)
+    attachment.Parent = hrp
+
+    flyParticles = Instance.new("ParticleEmitter")
+    flyParticles.Texture = "rbxasset://textures/particles/fire_main.dds"
+    flyParticles.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, COR_PROPULSOR),
+        ColorSequenceKeypoint.new(0.4, Color3.fromRGB(150, 230, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 80, 180)),
+    })
+    flyParticles.Size = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 2.5),
+        NumberSequenceKeypoint.new(0.5, 1.5),
+        NumberSequenceKeypoint.new(1, 0),
+    })
+    flyParticles.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.1),
+        NumberSequenceKeypoint.new(1, 1),
+    })
+    flyParticles.Lifetime = NumberRange.new(0.25, 0.5)
+    flyParticles.Rate = 120
+    flyParticles.Speed = NumberRange.new(20, 35)
+    flyParticles.SpreadAngle = Vector2.new(12, 12)
+    flyParticles.Rotation = NumberRange.new(0, 360)
+    flyParticles.LightEmission = 1
+    flyParticles.LightInfluence = 0
+    flyParticles.Parent = attachment
+
+    flyLight = Instance.new("PointLight")
+    flyLight.Color = COR_PROPULSOR
+    flyLight.Range = 12
+    flyLight.Brightness = 2
+    flyLight.Parent = attachment
+
+    flyTrail = Instance.new("Trail")
+    flyTrail.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, COR_PROPULSOR),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 40, 100)),
+    })
+    flyTrail.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.2),
+        NumberSequenceKeypoint.new(1, 1),
+    })
+    flyTrail.Lifetime = 0.6
+    flyTrail.LightEmission = 1
+    flyTrail.Attachment0 = attachment
+    flyTrail.Attachment1 = attachment
+    flyTrail.Parent = hrp
+end
+
+local function limparEfeitosFly(hrp)
+    if not hrp then return end
+    local att = hrp:FindFirstChild("IronMan_Thruster")
+    if att then att:Destroy() end
+    if flyParticles then flyParticles:Destroy(); flyParticles = nil end
+    if flyLight then flyLight:Destroy(); flyLight = nil end
+    if flyTrail then flyTrail:Destroy(); flyTrail = nil end
+end
+
+local function ativarFly()
+    if flyAtivo then return end
+    local char = player.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    if not hrp or not hum then return end
+
+    flyAtivo = true
+    inclinacaoAtual = INCLINACAO_NORMAL
+    hum.PlatformStand = true
+
+    flyBV = Instance.new("BodyVelocity")
+    flyBV.Name = "IronMan_FlyBV"
+    flyBV.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+    flyBV.Velocity = Vector3.new(0, 0, 0)
+    flyBV.Parent = hrp
+
+    flyBG = Instance.new("BodyGyro")
+    flyBG.Name = "IronMan_FlyBG"
+    flyBG.MaxTorque = Vector3.new(1e5, 1e5, 1e5)
+    flyBG.P = 15000
+    flyBG.D = 900
+    flyBG.CFrame = Workspace.CurrentCamera.CFrame
+    flyBG.Parent = hrp
+
+    criarEfeitosFly(hrp)
+
+    btnBoost.Visible = true
+    btnFly.Text = "STOP"
+    btnFly.TextColor3 = Color3.fromRGB(255, 100, 100)
+    flyStroke.Color = Color3.fromRGB(255, 100, 100)
+    statusFlyLbl.Text = "⚡ FLY ON"
+    statusFlyLbl.TextColor3 = Color3.fromRGB(100, 255, 150)
+    statusFlyStroke.Color = Color3.fromRGB(100, 255, 150)
+
+    conexaoRender = RunService.RenderStepped:Connect(function()
+        local char2 = player.Character
+        local hrp2 = char2 and char2:FindFirstChild("HumanoidRootPart")
+        if not hrp2 or not flyBV or not flyBG then return end
+
+        local cam = Workspace.CurrentCamera
+        local alvoInclinacao = boostAtivo and INCLINACAO_BOOST or INCLINACAO_NORMAL
+        inclinacaoAtual = inclinacaoAtual + (alvoInclinacao - inclinacaoAtual) * VELOCIDADE_INCLIN
+        flyBG.CFrame = cam.CFrame * CFrame.Angles(inclinacaoAtual, 0, 0)
+
+        local moveDir = Vector3.new(0, 0, 0)
+        local hum2 = char2:FindFirstChildOfClass("Humanoid")
+        if hum2 then
+            local md = hum2.MoveDirection
+            if md.Magnitude > 0.05 then
+                local horiz = Vector3.new(md.X, 0, md.Z)
+                if horiz.Magnitude > 0.01 then horiz = horiz.Unit end
+                local pitch = cam.CFrame.LookVector.Y
+                moveDir = Vector3.new(horiz.X, pitch * FORCA_VERTICAL, horiz.Z)
+                if moveDir.Magnitude > 0.01 then moveDir = moveDir.Unit end
+            end
+        end
+
+        local speed = boostAtivo and VELOCIDADE_BOOST or VELOCIDADE
+        if moveDir.Magnitude > 0 then
+            flyBV.Velocity = flyBV.Velocity:Lerp(moveDir * speed, SUAVIDADE)
+        else
+            flyBV.Velocity = flyBV.Velocity:Lerp(Vector3.new(0,0,0), 0.3)
+        end
+    end)
+end
+
+local function desativarFly()
+    if not flyAtivo then return end
+    flyAtivo = false
+
+    if conexaoRender then conexaoRender:Disconnect(); conexaoRender = nil end
+    if flyBV then flyBV:Destroy(); flyBV = nil end
+    if flyBG then flyBG:Destroy(); flyBG = nil end
+
+    local char = player.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    if hum then hum.PlatformStand = false end
+    limparEfeitosFly(hrp)
+
+    btnBoost.Visible = false
+    btnFly.Text = "FLY"
+    btnFly.TextColor3 = COR_PROPULSOR
+    flyStroke.Color = COR_PROPULSOR
+    statusFlyLbl.Text = "⚡ OFFLINE"
+    statusFlyLbl.TextColor3 = COR_PROPULSOR
+    statusFlyStroke.Color = COR_PROPULSOR
+    boostAtivo = false
+end
+
+btnFly.MouseButton1Click:Connect(function()
+    if flyAtivo then desativarFly() else ativarFly() end
+end)
+
+btnBoost.MouseButton1Down:Connect(function() boostAtivo = true end)
+btnBoost.MouseButton1Up:Connect(function() boostAtivo = false end)
+btnBoost.MouseLeave:Connect(function() boostAtivo = false end)
+
+-- ============================================================
+-- PAINEL DE COMBATE FLUTUANTE (MOBILE FIX)
 -- ============================================================
 local function abrirPainelCombate()
-    -- Destrói o antigo se já existir para evitar sobreposição
     local antigo = playerGui:FindFirstChild("PainelCombate")
     if antigo then antigo:Destroy() end
 
@@ -423,15 +582,14 @@ local function abrirPainelCombate()
     main.Position = UDim2.new(1, -240, 0.5, -200)
     main.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
     main.BorderSizePixel = 0
-    main.Active = false -- Importante: o fundo não engole o toque do botão
+    main.Active = false
     main.Parent = gui
     corner(main, 10)
 
-    -- Barra de Título
     local titleBar = Instance.new("Frame")
     titleBar.Size = UDim2.new(1, 0, 0, 38)
     titleBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    titleBar.Active = false -- Importante: não engole o toque
+    titleBar.Active = false
     titleBar.Parent = main
     corner(titleBar, 10)
 
@@ -446,30 +604,23 @@ local function abrirPainelCombate()
     titleText.TextXAlignment = Enum.TextXAlignment.Left
     titleText.Parent = titleBar
 
-    -- Lógica manual de Drag (Arrastar) sem Active=true
-    local dragging = false
-    local dragInput, dragStart, startPos
-
+    -- Arrastar
+    local dragging, dragInput, dragStart, startPos
     titleBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
             startPos = main.Position
-            
             input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
+                if input.UserInputState == Enum.UserInputState.End then dragging = false end
             end)
         end
     end)
-
     titleBar.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
     end)
-
     UserInputService.InputChanged:Connect(function(input)
         if input == dragInput and dragging then
             local delta = input.Position - dragStart
@@ -477,7 +628,7 @@ local function abrirPainelCombate()
         end
     end)
 
-    -- Botão de Fechar (ZIndex Máximo e Active=true para garantir o toque)
+    -- Botão Fechar
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 34, 0, 34)
     closeBtn.Position = UDim2.new(1, -38, 0, 2)
@@ -491,15 +642,10 @@ local function abrirPainelCombate()
     closeBtn.Parent = titleBar
     corner(closeBtn, 8)
     
-    -- Função de fechar robusta (suporta mouse e touch)
-    local function fecharPainel()
-        gui:Destroy()
-    end
-
+    local function fecharPainel() gui:Destroy() end
     closeBtn.MouseButton1Click:Connect(fecharPainel)
     closeBtn.Activated:Connect(fecharPainel)
 
-    -- Botões de Comando
     local scroll = Instance.new("ScrollingFrame")
     scroll.Size = UDim2.new(1, -10, 1, -48)
     scroll.Position = UDim2.new(0, 5, 0, 43)
@@ -523,21 +669,12 @@ local function abrirPainelCombate()
     padding.Parent = scroll
 
     local comandos = {
-        {"Soco - Rosto", "//SOCO - ROSTO"},
-        {"Chute - Tórax", "//CHUTE - TÓRAX"},
-        {"Joelhada - Abdômen", "//JOELHADA - ABDÔMEN"},
-        {"Cotovelada - Tórax", "//COTOVELADA - TÓRAX"},
-        {"Esquiva", "//ESQUIVA"},
-        {"Bloqueio", "//BLOQUEIO"},
-        {"Contra-Ataque", "//CONTRA-ATAQUE"},
-        {"Agarrão", "//AGARRÃO"},
-        {"Imobilização", "//IMOBILIZAÇÃO"},
-        {"Derrubada", "//DERRUBADA"},
-        {"Tiro na Cara", "//TIRO - NA CARA"},
-        {"Render", "/RENDER"},
-        {"Suplex", "//SUPLEX - QUEDA DE WRESTLING"},
-        {"Furar Pneus", "//FURAR PNEUS"},
-        {"Jogar Granada", "//JOGAR GRANADA"},
+        {"Soco - Rosto", "//SOCO - ROSTO"}, {"Chute - Tórax", "//CHUTE - TÓRAX"},
+        {"Joelhada - Abdômen", "//JOELHADA - ABDÔMEN"}, {"Cotovelada - Tórax", "//COTOVELADA - TÓRAX"},
+        {"Esquiva", "//ESQUIVA"}, {"Bloqueio", "//BLOQUEIO"}, {"Contra-Ataque", "//CONTRA-ATAQUE"},
+        {"Agarrão", "//AGARRÃO"}, {"Imobilização", "//IMOBILIZAÇÃO"}, {"Derrubada", "//DERRUBADA"},
+        {"Tiro na Cara", "//TIRO - NA CARA"}, {"Render", "/RENDER"}, {"Suplex", "//SUPLEX - QUEDA DE WRESTLING"},
+        {"Furar Pneus", "//FURAR PNEUS"}, {"Jogar Granada", "//JOGAR GRANADA"},
         {"Micro Armas (Mini Uzi)", "//MICRO ARMAS - TIRO NO ROSTO (Mini Uzi)"},
         {"Mini Lança Míssel", "//MINI LANÇA MÍSSEL - EXPLODE (Míssel pequeno implantado no ombro)"},
         {"Tiro de 762", "//TIRO DE 762 - TÓRAX (Um tiro de calibre 762 vindo do braço esquerdo)"},
@@ -556,10 +693,8 @@ local function abrirPainelCombate()
         btn.Active = true
         btn.Parent = scroll
         corner(btn, 6)
-        
         btn.MouseButton1Click:Connect(function()
             enviar(cmd[2])
-            -- Feedback visual
             WindUI:Notify({Title = "Comando", Content = cmd[1], Duration = 2, Icon = "check"})
         end)
     end
@@ -582,117 +717,87 @@ local Window = WindUI:CreateWindow({
 
 -- ==================== ABA: COMBATE ====================
 local CombatTab = Window:Tab({ Title = "Combate", Icon = "swords" })
-
 CombatTab:Section({ Title = "Interface Rápida" })
 CombatTab:Button({
     Title = "Abrir Painel Flutuante",
-    Desc = "Abre o painel estilo DRNL na lateral da tela.",
+    Desc = "Abre o painel de comandos na lateral.",
     Icon = "layout-panel-left",
     Callback = abrirPainelCombate
 })
 
 CombatTab:Section({ Title = "Ataques Básicos" })
-local basicos = {
-    {"Soco - Rosto", "//SOCO - ROSTO"},
-    {"Chute - Tórax", "//CHUTE - TÓRAX"},
-    {"Joelhada - Abdômen", "//JOELHADA - ABDÔMEN"},
-    {"Cotovelada - Tórax", "//COTOVELADA - TÓRAX"},
-}
-for _, cmd in ipairs(basicos) do
-    CombatTab:Button({
-        Title = cmd[1],
-        Desc = cmd[2],
-        Icon = "hand",
-        Callback = function() enviar(cmd[2]) end
-    })
+for _, cmd in ipairs({
+    {"Soco - Rosto", "//SOCO - ROSTO"}, {"Chute - Tórax", "//CHUTE - TÓRAX"},
+    {"Joelhada - Abdômen", "//JOELHADA - ABDÔMEN"}, {"Cotovelada - Tórax", "//COTOVELADA - TÓRAX"},
+}) do
+    CombatTab:Button({ Title = cmd[1], Desc = cmd[2], Icon = "hand", Callback = function() enviar(cmd[2]) end })
 end
 
 CombatTab:Section({ Title = "Ações Táticas" })
-local taticas = {
-    {"Esquiva", "//ESQUIVA"},
-    {"Bloqueio", "//BLOQUEIO"},
-    {"Contra-Ataque", "//CONTRA-ATAQUE"},
-    {"Agarrão", "//AGARRÃO"},
-    {"Imobilização", "//IMOBILIZAÇÃO"},
-    {"Derrubada", "//DERRUBADA"},
+for _, cmd in ipairs({
+    {"Esquiva", "//ESQUIVA"}, {"Bloqueio", "//BLOQUEIO"}, {"Contra-Ataque", "//CONTRA-ATAQUE"},
+    {"Agarrão", "//AGARRÃO"}, {"Imobilização", "//IMOBILIZAÇÃO"}, {"Derrubada", "//DERRUBADA"},
     {"Suplex (Wrestling)", "//SUPLEX - QUEDA DE WRESTLING"},
-}
-for _, cmd in ipairs(taticas) do
-    CombatTab:Button({
-        Title = cmd[1],
-        Desc = cmd[2],
-        Icon = "shield",
-        Callback = function() enviar(cmd[2]) end
-    })
+}) do
+    CombatTab:Button({ Title = cmd[1], Desc = cmd[2], Icon = "shield", Callback = function() enviar(cmd[2]) end })
 end
 
 CombatTab:Section({ Title = "Armas e Utilidades" })
-local armas = {
-    {"Tiro na Cara", "//TIRO - NA CARA"},
-    {"Render", "/RENDER"},
-    {"Furar Pneus", "//FURAR PNEUS"},
-    {"Jogar Granada", "//JOGAR GRANADA"},
-}
-for _, cmd in ipairs(armas) do
-    CombatTab:Button({
-        Title = cmd[1],
-        Desc = cmd[2],
-        Icon = "crosshair",
-        Callback = function() enviar(cmd[2]) end
-    })
+for _, cmd in ipairs({
+    {"Tiro na Cara", "//TIRO - NA CARA"}, {"Render", "/RENDER"},
+    {"Furar Pneus", "//FURAR PNEUS"}, {"Jogar Granada", "//JOGAR GRANADA"},
+}) do
+    CombatTab:Button({ Title = cmd[1], Desc = cmd[2], Icon = "crosshair", Callback = function() enviar(cmd[2]) end })
 end
 
 -- ==================== ABA: ARMADURA ====================
 local ArmorTab = Window:Tab({ Title = "Armadura", Icon = "shield-check" })
-
 ArmorTab:Section({ Title = "Sistemas de Visão" })
 ArmorTab:Toggle({
     Title = "Ativar HUD da Armadura (A.R.I.A.)",
     Desc = "Liga a interface tática imersiva na tela.",
     Value = false,
-    Callback = function(state)
-        toggleHUD(state)
-    end
+    Callback = function(state) toggleHUD(state) end
 })
 
 ArmorTab:Section({ Title = "Armamento Integrado" })
-local armorCmds = {
+for _, cmd in ipairs({
     {"Micro Armas (Mini Uzi)", "//MICRO ARMAS - TIRO NO ROSTO (Mini Uzi)"},
     {"Mini Lança Míssel", "//MINI LANÇA MÍSSEL - EXPLODE (Míssel pequeno implantado no ombro)"},
     {"Tiro de 762", "//TIRO DE 762 - TÓRAX (Um tiro de calibre 762 vindo do braço esquerdo)"},
-}
-for _, cmd in ipairs(armorCmds) do
-    ArmorTab:Button({
-        Title = cmd[1],
-        Desc = cmd[2],
-        Icon = "rocket",
-        Callback = function() enviar(cmd[2]) end
-    })
+}) do
+    ArmorTab:Button({ Title = cmd[1], Desc = cmd[2], Icon = "rocket", Callback = function() enviar(cmd[2]) end })
 end
 
 -- ==================== ABA: SISTEMAS ====================
 local SystemTab = Window:Tab({ Title = "Sistemas", Icon = "cpu" })
-
 SystemTab:Section({ Title = "Visão Tática" })
 SystemTab:Toggle({
     Title = "Ativar ESP (Inimigos)",
     Desc = "Destaca jogadores e mostra a distância.",
     Value = false,
-    Callback = function(state)
-        toggleESP(state)
+    Callback = function(state) toggleESP(state) end
+})
+
+SystemTab:Section({ Title = "Voo (Iron Man)" })
+SystemTab:Button({
+    Title = "Ativar/Desativar Voo",
+    Desc = "Alterna o modo de voo (O botão também está na tela).",
+    Icon = "plane",
+    Callback = function()
+        if flyAtivo then desativarFly() else ativarFly() end
     end
 })
 
 SystemTab:Section({ Title = "Informações" })
 SystemTab:Paragraph({
     Title = "Stark Combat Hub",
-    Desc = "Interface de RP desenvolvida para máxima imersão.\nVersão: 4.3 (Mobile Overlap Fix)\nDesign baseado no Homem de Ferro."
+    Desc = "Interface de RP completa com voo, HUD e ESP.\nVersão: 4.4 (Fly + Mobile Fix)\nDesign baseado no Homem de Ferro."
 })
 
--- Boas vindas
 WindUI:Notify({
     Title = "STARK HUB ONLINE",
-    Content = "Bem-vindo, Sr. Stark.",
+    Content = "Voo ativado! Use o botão FLY na tela.",
     Duration = 6,
     Icon = "check-circle"
 })
