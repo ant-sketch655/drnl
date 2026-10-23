@@ -16,6 +16,8 @@ local comandos = {
     {nome = "/furar pneu", cmd = "/furar pneu", key = nil, vezes = 3},
     {nome = "/lockpick", cmd = "/lockpick", key = nil, vezes = 1},
     {nome = "/algemar", cmd = "/algemar", key = nil, vezes = 1},
+    {nome = "/facada", cmd = "/facada no cranio", key = nil, vezes = 1},
+    {nome = "/pd", cmd = "/pd", key = nil, vezes = 1},
 }
 
 local waitingForKey = nil
