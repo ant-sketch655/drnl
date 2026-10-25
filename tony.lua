@@ -1,5 +1,5 @@
 -- ============================================================
--- STARK COMBAT HUB — WINDUI + FLY + HUD LIMPO
+-- STARK COMBAT HUB — WINDUI + FLY + HUD AJUSTADO
 -- ============================================================
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
@@ -131,7 +131,7 @@ Players.PlayerAdded:Connect(function(p)
 end)
 
 -- ============================================================
--- HUD DA ARMADURA (CORRIGIDO E TRANSPARENTE)
+-- HUD DA ARMADURA (AJUSTADA PARA CABER NA TELA E MAIS TRANSPARENTE)
 -- ============================================================
 local armorGui = nil
 
@@ -149,17 +149,17 @@ local function toggleHUD(state)
     armorGui.DisplayOrder = 999
     armorGui.Parent = (gethui and gethui()) or CoreGui
 
-    -- Imagem Principal (Ajustada para transparência e tamanho correto)
+    -- Imagem Principal
     local bgImage = Instance.new("ImageLabel")
-    bgImage.Size = UDim2.new(1, 0, 1, 0) -- Preenche a tela toda
+    bgImage.Size = UDim2.new(1, 0, 1, 0) 
     bgImage.BackgroundTransparency = 1
     bgImage.Image = "rbxassetid://124658062891182"
-    bgImage.ScaleType = Enum.ScaleType.Crop -- Evita que a imagem fique esticada
-    bgImage.ImageTransparency = 0.6 -- Deixa a interface transparente para ver o jogo
+    bgImage.ScaleType = Enum.ScaleType.Fit -- Mudado para Fit para não cortar as bordas no celular
+    bgImage.ImageTransparency = 0.75 -- Mais transparente para enxergar o jogo
     bgImage.ZIndex = 2
     bgImage.Parent = armorGui
 
-    -- Efeito de Scanline (Linha que desce)
+    -- Efeito de Scanline
     local scanline = Instance.new("Frame")
     scanline.Size = UDim2.new(1, 0, 0, 4)
     scanline.BackgroundColor3 = CYAN
@@ -199,10 +199,10 @@ local VELOCIDADE = 50
 local VELOCIDADE_BOOST = 120
 local SUAVIDADE = 0.2
 
--- Botão FLY (Ajustado para não cortar o texto)
+-- Botão FLY (Movido para a direita, acima do botão de pulo)
 local btnFly = Instance.new("TextButton")
 btnFly.Size = UDim2.new(0, 60, 0, 60)
-btnFly.Position = UDim2.new(0, 20, 1, -200)
+btnFly.Position = UDim2.new(1, -80, 1, -180) 
 btnFly.BackgroundColor3 = COR_BOTAO
 btnFly.BorderSizePixel = 0
 btnFly.Text = "FLY"
@@ -217,10 +217,10 @@ flyStroke.Color = COR_PROPULSOR
 flyStroke.Thickness = 2
 flyStroke.Parent = btnFly
 
--- Botão BOOST
+-- Botão BOOST (Movido para cima do Fly)
 local btnBoost = Instance.new("TextButton")
 btnBoost.Size = UDim2.new(0, 50, 0, 50)
-btnBoost.Position = UDim2.new(0, 25, 1, -270)
+btnBoost.Position = UDim2.new(1, -75, 1, -250)
 btnBoost.BackgroundColor3 = COR_BOTAO
 btnBoost.BorderSizePixel = 0
 btnBoost.Text = "⚡"
@@ -236,17 +236,17 @@ boostStroke.Color = COR_PROPULSOR
 boostStroke.Thickness = 1.5
 boostStroke.Parent = btnBoost
 
--- Status Label
+-- Status Label (Movido para a direita)
 local statusFlyLbl = Instance.new("TextLabel")
-statusFlyLbl.Size = UDim2.new(0, 160, 0, 26)
-statusFlyLbl.Position = UDim2.new(0, 20, 1, -110)
+statusFlyLbl.Size = UDim2.new(0, 120, 0, 26)
+statusFlyLbl.Position = UDim2.new(1, -140, 1, -120)
 statusFlyLbl.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
 statusFlyLbl.BackgroundTransparency = 0.3
 statusFlyLbl.BorderSizePixel = 0
 statusFlyLbl.Text = "⚡ OFFLINE"
 statusFlyLbl.TextColor3 = COR_PROPULSOR
 statusFlyLbl.Font = Enum.Font.Code
-statusFlyLbl.TextSize = 13
+statusFlyLbl.TextSize = 12
 statusFlyLbl.Parent = tela
 corner(statusFlyLbl, 6)
 local statusFlyStroke = Instance.new("UIStroke")
@@ -429,7 +429,7 @@ btnBoost.MouseButton1Click:Connect(function()
 end)
 
 -- ============================================================
--- PAINEL DE COMBATE FLUTUANTE (MOBILE FIX)
+-- PAINEL DE COMBATE FLUTUANTE
 -- ============================================================
 local function abrirPainelCombate()
     local antigo = playerGui:FindFirstChild("PainelCombate")
@@ -656,12 +656,12 @@ SystemTab:Button({
 SystemTab:Section({ Title = "Informações" })
 SystemTab:Paragraph({
     Title = "Stark Combat Hub",
-    Desc = "Interface de RP completa com voo, HUD e ESP.\nVersão: 5.1 (HUD Limpo + Fly Toggle)\nDesign baseado no Homem de Ferro."
+    Desc = "Interface de RP completa com voo, HUD e ESP.\nVersão: 5.2 (HUD Ajustado)\nDesign baseado no Homem de Ferro."
 })
 
 WindUI:Notify({
     Title = "STARK ONLINE",
-    Content = "HUD ajustado e Fly pronto para uso.",
+    Content = "HUD ajustado e botões reposicionados.",
     Duration = 6,
     Icon = "check-circle"
 })
