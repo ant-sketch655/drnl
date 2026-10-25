@@ -1,5 +1,5 @@
 -- ============================================================
--- STARK COMBAT HUB — WINDUI + FLY + MOBILE FIX
+-- STARK COMBAT HUB — WINDUI + FLY + HUD NOVO
 -- ============================================================
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
@@ -16,7 +16,6 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 local CYAN = Color3.fromRGB(0, 200, 255)
 local WHITE = Color3.fromRGB(235, 245, 255)
-local BG = Color3.fromRGB(10, 16, 25)
 local COR_BOTAO = Color3.fromRGB(22, 22, 22)
 local COR_PROPULSOR = CYAN
 
@@ -132,7 +131,7 @@ Players.PlayerAdded:Connect(function(p)
 end)
 
 -- ============================================================
--- HUD DA ARMADURA (A.R.I.A. STYLE)
+-- HUD DA ARMADURA (MODELO 124658062891182)
 -- ============================================================
 local armorGui = nil
 
@@ -150,178 +149,106 @@ local function toggleHUD(state)
     armorGui.DisplayOrder = 999
     armorGui.Parent = (gethui and gethui()) or CoreGui
 
-    -- Vinheta
-    local vignette = Instance.new("Frame")
-    vignette.Size = UDim2.new(1,0,1,0)
-    vignette.BackgroundTransparency = 1
-    vignette.Parent = armorGui
-    for _, pos in ipairs({
-        {UDim2.new(0,0,0,0), UDim2.new(0,400,0,400), 0},
-        {UDim2.new(1,-400,0,0), UDim2.new(0,400,0,400), 90},
-        {UDim2.new(0,0,1,-400), UDim2.new(0,400,0,400), 270},
-        {UDim2.new(1,-400,1,-400), UDim2.new(0,400,0,400), 180},
-    }) do
-        local f = Instance.new("Frame")
-        f.Size = pos[2]
-        f.Position = pos[1]
-        f.BackgroundColor3 = Color3.fromRGB(0,0,0)
-        f.BackgroundTransparency = 0.3
-        f.BorderSizePixel = 0
-        f.ZIndex = 1
-        f.Parent = vignette
-        local grad = Instance.new("UIGradient")
-        grad.Rotation = pos[3]
-        grad.Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.2),
-            NumberSequenceKeypoint.new(1, 1),
-        })
-        grad.Parent = f
-    end
+    -- Fundo do HUD (Imagem Principal)
+    local bgImage = Instance.new("ImageLabel")
+    bgImage.Size = UDim2.new(1, 0, 1, 0)
+    bgImage.BackgroundTransparency = 1
+    bgImage.Image = "rbxassetid://124658062891182"
+    bgImage.ScaleType = Enum.ScaleType.Fit
+    bgImage.ImageTransparency = 0.15 -- Transparência para não atrapalhar a visão
+    bgImage.ZIndex = 2
+    bgImage.Parent = armorGui
 
-    -- Linhas de Scan
-    local scanContainer = Instance.new("Frame")
-    scanContainer.Size = UDim2.new(1,0,1,0)
-    scanContainer.BackgroundTransparency = 1
-    scanContainer.ZIndex = 2
-    scanContainer.Parent = armorGui
-    for i = 0, 40 do
-        local line = Instance.new("Frame")
-        line.Size = UDim2.new(1,0,0,1)
-        line.Position = UDim2.new(0,0,i/40,0)
-        line.BackgroundColor3 = CYAN
-        line.BackgroundTransparency = 0.92
-        line.BorderSizePixel = 0
-        line.ZIndex = 2
-        line.Parent = scanContainer
-    end
-
-    -- Brackets
-    local bracketSize = 80
-    local bracketThick = 3
-    for _, corner in ipairs({
-        {UDim2.new(0,20,0,20), 1, 1},
-        {UDim2.new(1,-20-bracketSize,0,20), 1, -1},
-        {UDim2.new(0,20,1,-20-bracketSize), -1, 1},
-        {UDim2.new(1,-20-bracketSize,1,-20-bracketSize), -1, -1},
-    }) do
-        local container = Instance.new("Frame")
-        container.Size = UDim2.new(0, bracketSize, 0, bracketSize)
-        container.Position = corner[1]
-        container.BackgroundTransparency = 1
-        container.ZIndex = 3
-        container.Parent = armorGui
-        local h = Instance.new("Frame")
-        h.Size = UDim2.new(corner[2], 0, 0, bracketThick)
-        h.Position = UDim2.new(corner[2] == 1 and 0 or 1, 0, corner[3] == 1 and 0 or 1, 0)
-        h.BackgroundColor3 = CYAN
-        h.BorderSizePixel = 0
-        h.ZIndex = 3
-        h.Parent = container
-        local v = Instance.new("Frame")
-        v.Size = UDim2.new(0, bracketThick, corner[3], 0)
-        v.Position = UDim2.new(corner[2] == 1 and 0 or 1, 0, corner[3] == 1 and 0 or 1, 0)
-        v.BackgroundColor3 = CYAN
-        v.BorderSizePixel = 0
-        v.ZIndex = 3
-        v.Parent = container
-    end
-
-    -- Retículo
-    local reticle = Instance.new("Frame")
-    reticle.Size = UDim2.new(0, 160, 0, 160)
-    reticle.Position = UDim2.new(0.5, -80, 0.5, -80)
-    reticle.BackgroundTransparency = 1
-    reticle.ZIndex = 5
-    reticle.Parent = armorGui
-    local circle = Instance.new("Frame")
-    circle.Size = UDim2.new(1,0,1,0)
-    circle.BackgroundTransparency = 1
-    circle.ZIndex = 6
-    circle.Parent = reticle
-    local cStroke = Instance.new("UIStroke")
-    cStroke.Color = CYAN
-    cStroke.Thickness = 1
-    cStroke.Transparency = 0.4
-    cStroke.Parent = circle
-    local cCorner = Instance.new("UICorner")
-    cCorner.CornerRadius = UDim.new(1,0)
-    cCorner.Parent = circle
-    for _, dim in ipairs({
-        {UDim2.new(0,80,0,1), UDim2.new(0.5,-40,0.5,0)},
-        {UDim2.new(0,1,0,80), UDim2.new(0.5,0,0.5,-40)},
-    }) do
-        local bar = Instance.new("Frame")
-        bar.Size = dim[1]
-        bar.Position = dim[2]
-        bar.BackgroundColor3 = CYAN
-        bar.BackgroundTransparency = 0.3
-        bar.BorderSizePixel = 0
-        bar.ZIndex = 6
-        bar.Parent = reticle
-    end
-
-    -- Painéis
-    local leftPanel = Instance.new("Frame")
-    leftPanel.Size = UDim2.new(0, 220, 0, 140)
-    leftPanel.Position = UDim2.new(0, 40, 0.5, -70)
-    leftPanel.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
-    leftPanel.BackgroundTransparency = 0.6
-    leftPanel.BorderSizePixel = 0
-    leftPanel.ZIndex = 5
-    leftPanel.Parent = armorGui
-    local leftInfo = Instance.new("TextLabel")
-    leftInfo.Size = UDim2.new(1,-10,1,-30)
-    leftInfo.Position = UDim2.new(0,5,0,25)
-    leftInfo.BackgroundTransparency = 1
-    leftInfo.TextColor3 = CYAN
-    leftInfo.TextXAlignment = Enum.TextXAlignment.Left
-    leftInfo.TextYAlignment = Enum.TextYAlignment.Top
-    leftInfo.Font = Enum.Font.Code
-    leftInfo.TextSize = 11
-    leftInfo.ZIndex = 6
-    leftInfo.Parent = leftPanel
-
-    local rightPanel = Instance.new("Frame")
-    rightPanel.Size = UDim2.new(0, 220, 0, 140)
-    rightPanel.Position = UDim2.new(1, -260, 0.5, -70)
-    rightPanel.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
-    rightPanel.BackgroundTransparency = 0.6
-    rightPanel.BorderSizePixel = 0
-    rightPanel.ZIndex = 5
-    rightPanel.Parent = armorGui
-    local rightInfo = Instance.new("TextLabel")
-    rightInfo.Size = UDim2.new(1,-10,1,-30)
-    rightInfo.Position = UDim2.new(0,5,0,25)
-    rightInfo.BackgroundTransparency = 1
-    rightInfo.TextColor3 = CYAN
-    rightInfo.TextXAlignment = Enum.TextXAlignment.Left
-    rightInfo.TextYAlignment = Enum.TextYAlignment.Top
-    rightInfo.Font = Enum.Font.Code
-    rightInfo.TextSize = 11
-    rightInfo.ZIndex = 6
-    rightInfo.Parent = rightPanel
-
-    -- Atualização
+    -- Efeito de Scanline (Linha que desce)
+    local scanline = Instance.new("Frame")
+    scanline.Size = UDim2.new(1, 0, 0, 4)
+    scanline.BackgroundColor3 = CYAN
+    scanline.BackgroundTransparency = 0.7
+    scanline.BorderSizePixel = 0
+    scanline.ZIndex = 5
+    scanline.Parent = armorGui
+    
     task.spawn(function()
         while armorGui and armorGui.Parent do
-            task.wait(0.5)
+            scanline.Position = UDim2.new(0, 0, 0, -4)
+            local tween = game:GetService("TweenService"):Create(scanline, TweenInfo.new(3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {Position = UDim2.new(0, 0, 1, 0)})
+            tween:Play()
+            task.wait(3)
+        end
+    end)
+
+    -- Retículo Central Animado
+    local reticle = Instance.new("ImageLabel")
+    reticle.Size = UDim2.new(0, 200, 0, 200)
+    reticle.Position = UDim2.new(0.5, -100, 0.5, -100)
+    reticle.BackgroundTransparency = 1
+    reticle.Image = "rbxassetid://12187365364" -- Ícone de círculo de foco
+    reticle.ImageColor3 = CYAN
+    reticle.ImageTransparency = 0.4
+    reticle.ZIndex = 4
+    reticle.Parent = armorGui
+    
+    task.spawn(function()
+        local angle = 0
+        while armorGui and armorGui.Parent do
+            task.wait(0.03)
+            angle = (angle + 1) % 360
+            reticle.Rotation = angle
+        end
+    end)
+
+    -- Painel de Status Esquerdo
+    local leftText = Instance.new("TextLabel")
+    leftText.Size = UDim2.new(0, 250, 0, 100)
+    leftText.Position = UDim2.new(0, 50, 0.5, -50)
+    leftText.BackgroundTransparency = 1
+    leftText.TextColor3 = CYAN
+    leftText.Font = Enum.Font.Code
+    leftText.TextSize = 14
+    leftText.TextXAlignment = Enum.TextXAlignment.Left
+    leftText.TextYAlignment = Enum.TextYAlignment.Top
+    leftText.ZIndex = 5
+    leftText.Parent = armorGui
+
+    -- Painel de Status Direito
+    local rightText = Instance.new("TextLabel")
+    rightText.Size = UDim2.new(0, 250, 0, 100)
+    rightText.Position = UDim2.new(1, -300, 0.5, -50)
+    rightText.BackgroundTransparency = 1
+    rightText.TextColor3 = CYAN
+    rightText.Font = Enum.Font.Code
+    rightText.TextSize = 14
+    rightText.TextXAlignment = Enum.TextXAlignment.Right
+    rightText.TextYAlignment = Enum.TextYAlignment.Top
+    rightText.ZIndex = 5
+    rightText.Parent = armorGui
+
+    -- Atualização dos Dados
+    task.spawn(function()
+        while armorGui and armorGui.Parent do
+            task.wait(0.2)
             if armorGui and armorGui.Parent then
                 local char = player.Character
                 local h = char and char:FindFirstChildOfClass("Humanoid")
-                if h and leftInfo and leftInfo.Parent then
-                    leftInfo.Text = string.format(
-                        "PWR: %d%%\nHP: %d%%\nWALK: %d u/s\nPWR-OUT: NOMINAL",
-                        math.random(90, 100),
-                        math.floor(h.Health / h.MaxHealth * 100),
-                        math.floor(h.WalkSpeed)
-                    )
+                
+                if leftText and leftText.Parent then
+                    if h then
+                        leftText.Text = string.format(
+                            "► ARMOR STATUS\n\n♦ HEALTH: %d%%\n♦ ENERGY: %d%%\n♦ SHIELD: %d%%",
+                            math.floor(h.Health / h.MaxHealth * 100),
+                            math.random(85, 100),
+                            math.random(90, 100)
+                        )
+                    else
+                        leftText.Text = "► ARMOR STATUS\n\n♦ OFFLINE"
+                    end
                 end
-                if rightInfo and rightInfo.Parent then
-                    rightInfo.Text = string.format(
-                        "SCAN: %s\nTARGETS: %d\nRANGE: %dm",
-                        scanAtivo and "ACTIVE" or "IDLE",
+
+                if rightText and rightText.Parent then
+                    rightText.Text = string.format(
+                        "TARGETING SYSTEM ◄\n\nHOSTILES: %d\nRANGE: 40m\nSTATUS: %s",
                         scanAtivo and (#Players:GetPlayers() - 1) or 0,
-                        40
+                        scanAtivo and "ACTIVE" or "IDLE"
                     )
                 end
             end
@@ -330,7 +257,7 @@ local function toggleHUD(state)
 end
 
 -- ============================================================
--- SISTEMA DE VOO (FLY) DO HOMEM DE FERRO
+-- SISTEMA DE VOO (FLY) DO HOMEM DE FERRO (BOOST CLIQUE)
 -- ============================================================
 local tela = Instance.new("ScreenGui")
 tela.Name = "StarkFlyUI"
@@ -535,6 +462,7 @@ end
 local function desativarFly()
     if not flyAtivo then return end
     flyAtivo = false
+    boostAtivo = false
 
     if conexaoRender then conexaoRender:Disconnect(); conexaoRender = nil end
     if flyBV then flyBV:Destroy(); flyBV = nil end
@@ -547,22 +475,34 @@ local function desativarFly()
     limparEfeitosFly(hrp)
 
     btnBoost.Visible = false
+    btnBoost.BackgroundColor3 = COR_BOTAO
     btnFly.Text = "FLY"
     btnFly.TextColor3 = COR_PROPULSOR
     flyStroke.Color = COR_PROPULSOR
     statusFlyLbl.Text = "⚡ OFFLINE"
     statusFlyLbl.TextColor3 = COR_PROPULSOR
     statusFlyStroke.Color = COR_PROPULSOR
-    boostAtivo = false
 end
 
 btnFly.MouseButton1Click:Connect(function()
     if flyAtivo then desativarFly() else ativarFly() end
 end)
 
-btnBoost.MouseButton1Down:Connect(function() boostAtivo = true end)
-btnBoost.MouseButton1Up:Connect(function() boostAtivo = false end)
-btnBoost.MouseLeave:Connect(function() boostAtivo = false end)
+-- Lógica do BOOST por clique (Toggle)
+btnBoost.MouseButton1Click:Connect(function()
+    boostAtivo = not boostAtivo
+    if boostAtivo then
+        btnBoost.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+        btnBoost.TextColor3 = Color3.fromRGB(0, 0, 0)
+        boostStroke.Color = Color3.fromRGB(255, 200, 50)
+        statusFlyLbl.Text = "⚡ BOOST ON"
+    else
+        btnBoost.BackgroundColor3 = COR_BOTAO
+        btnBoost.TextColor3 = COR_PROPULSOR
+        boostStroke.Color = COR_PROPULSOR
+        statusFlyLbl.Text = "⚡ FLY ON"
+    end
+end)
 
 -- ============================================================
 -- PAINEL DE COMBATE FLUTUANTE (MOBILE FIX)
@@ -792,12 +732,12 @@ SystemTab:Button({
 SystemTab:Section({ Title = "Informações" })
 SystemTab:Paragraph({
     Title = "Stark Combat Hub",
-    Desc = "Interface de RP completa com voo, HUD e ESP.\nVersão: 4.4 (Fly + Mobile Fix)\nDesign baseado no Homem de Ferro."
+    Desc = "Interface de RP completa com voo, HUD e ESP.\nVersão: 5.0 (HUD Atualizado + Boost Toggle)\nDesign baseado no Homem de Ferro."
 })
 
 WindUI:Notify({
-    Title = "STARK HUB ONLINE",
-    Content = "Voo ativado! Use o botão FLY na tela.",
+    Title = "STARK ONLINE",
+    Content = "",
     Duration = 6,
     Icon = "check-circle"
 })
