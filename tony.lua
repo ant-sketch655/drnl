@@ -1,5 +1,5 @@
 -- ============================================================
--- STARK COMBAT HUB — WINDUI + FLY + HUD NOVO
+-- STARK COMBAT HUB — WINDUI + FLY + HUD LIMPO
 -- ============================================================
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
@@ -131,7 +131,7 @@ Players.PlayerAdded:Connect(function(p)
 end)
 
 -- ============================================================
--- HUD DA ARMADURA (MODELO 124658062891182)
+-- HUD DA ARMADURA (CORRIGIDO E TRANSPARENTE)
 -- ============================================================
 local armorGui = nil
 
@@ -149,13 +149,13 @@ local function toggleHUD(state)
     armorGui.DisplayOrder = 999
     armorGui.Parent = (gethui and gethui()) or CoreGui
 
-    -- Fundo do HUD (Imagem Principal)
+    -- Imagem Principal (Ajustada para transparência e tamanho correto)
     local bgImage = Instance.new("ImageLabel")
-    bgImage.Size = UDim2.new(1, 0, 1, 0)
+    bgImage.Size = UDim2.new(1, 0, 1, 0) -- Preenche a tela toda
     bgImage.BackgroundTransparency = 1
     bgImage.Image = "rbxassetid://124658062891182"
-    bgImage.ScaleType = Enum.ScaleType.Fit
-    bgImage.ImageTransparency = 0.15 -- Transparência para não atrapalhar a visão
+    bgImage.ScaleType = Enum.ScaleType.Crop -- Evita que a imagem fique esticada
+    bgImage.ImageTransparency = 0.6 -- Deixa a interface transparente para ver o jogo
     bgImage.ZIndex = 2
     bgImage.Parent = armorGui
 
@@ -176,88 +176,10 @@ local function toggleHUD(state)
             task.wait(3)
         end
     end)
-
-    -- Retículo Central Animado
-    local reticle = Instance.new("ImageLabel")
-    reticle.Size = UDim2.new(0, 200, 0, 200)
-    reticle.Position = UDim2.new(0.5, -100, 0.5, -100)
-    reticle.BackgroundTransparency = 1
-    reticle.Image = "rbxassetid://12187365364" -- Ícone de círculo de foco
-    reticle.ImageColor3 = CYAN
-    reticle.ImageTransparency = 0.4
-    reticle.ZIndex = 4
-    reticle.Parent = armorGui
-    
-    task.spawn(function()
-        local angle = 0
-        while armorGui and armorGui.Parent do
-            task.wait(0.03)
-            angle = (angle + 1) % 360
-            reticle.Rotation = angle
-        end
-    end)
-
-    -- Painel de Status Esquerdo
-    local leftText = Instance.new("TextLabel")
-    leftText.Size = UDim2.new(0, 250, 0, 100)
-    leftText.Position = UDim2.new(0, 50, 0.5, -50)
-    leftText.BackgroundTransparency = 1
-    leftText.TextColor3 = CYAN
-    leftText.Font = Enum.Font.Code
-    leftText.TextSize = 14
-    leftText.TextXAlignment = Enum.TextXAlignment.Left
-    leftText.TextYAlignment = Enum.TextYAlignment.Top
-    leftText.ZIndex = 5
-    leftText.Parent = armorGui
-
-    -- Painel de Status Direito
-    local rightText = Instance.new("TextLabel")
-    rightText.Size = UDim2.new(0, 250, 0, 100)
-    rightText.Position = UDim2.new(1, -300, 0.5, -50)
-    rightText.BackgroundTransparency = 1
-    rightText.TextColor3 = CYAN
-    rightText.Font = Enum.Font.Code
-    rightText.TextSize = 14
-    rightText.TextXAlignment = Enum.TextXAlignment.Right
-    rightText.TextYAlignment = Enum.TextYAlignment.Top
-    rightText.ZIndex = 5
-    rightText.Parent = armorGui
-
-    -- Atualização dos Dados
-    task.spawn(function()
-        while armorGui and armorGui.Parent do
-            task.wait(0.2)
-            if armorGui and armorGui.Parent then
-                local char = player.Character
-                local h = char and char:FindFirstChildOfClass("Humanoid")
-                
-                if leftText and leftText.Parent then
-                    if h then
-                        leftText.Text = string.format(
-                            "► ARMOR STATUS\n\n♦ HEALTH: %d%%\n♦ ENERGY: %d%%\n♦ SHIELD: %d%%",
-                            math.floor(h.Health / h.MaxHealth * 100),
-                            math.random(85, 100),
-                            math.random(90, 100)
-                        )
-                    else
-                        leftText.Text = "► ARMOR STATUS\n\n♦ OFFLINE"
-                    end
-                end
-
-                if rightText and rightText.Parent then
-                    rightText.Text = string.format(
-                        "TARGETING SYSTEM ◄\n\nHOSTILES: %d\nRANGE: 40m\nSTATUS: %s",
-                        scanAtivo and (#Players:GetPlayers() - 1) or 0,
-                        scanAtivo and "ACTIVE" or "IDLE"
-                    )
-                end
-            end
-        end
-    end)
 end
 
 -- ============================================================
--- SISTEMA DE VOO (FLY) DO HOMEM DE FERRO (BOOST CLIQUE)
+-- SISTEMA DE VOO (FLY) DO HOMEM DE FERRO
 -- ============================================================
 local tela = Instance.new("ScreenGui")
 tela.Name = "StarkFlyUI"
@@ -277,6 +199,7 @@ local VELOCIDADE = 50
 local VELOCIDADE_BOOST = 120
 local SUAVIDADE = 0.2
 
+-- Botão FLY (Ajustado para não cortar o texto)
 local btnFly = Instance.new("TextButton")
 btnFly.Size = UDim2.new(0, 60, 0, 60)
 btnFly.Position = UDim2.new(0, 20, 1, -200)
@@ -284,8 +207,8 @@ btnFly.BackgroundColor3 = COR_BOTAO
 btnFly.BorderSizePixel = 0
 btnFly.Text = "FLY"
 btnFly.TextColor3 = COR_PROPULSOR
-btnFly.Font = Enum.Font.Code
-btnFly.TextSize = 16
+btnFly.Font = Enum.Font.GothamBold
+btnFly.TextSize = 14
 btnFly.AutoButtonColor = false
 btnFly.Parent = tela
 corner(btnFly, 30)
@@ -294,14 +217,15 @@ flyStroke.Color = COR_PROPULSOR
 flyStroke.Thickness = 2
 flyStroke.Parent = btnFly
 
+-- Botão BOOST
 local btnBoost = Instance.new("TextButton")
 btnBoost.Size = UDim2.new(0, 50, 0, 50)
-btnBoost.Position = UDim2.new(0, 30, 1, -270)
+btnBoost.Position = UDim2.new(0, 25, 1, -270)
 btnBoost.BackgroundColor3 = COR_BOTAO
 btnBoost.BorderSizePixel = 0
 btnBoost.Text = "⚡"
 btnBoost.TextColor3 = COR_PROPULSOR
-btnBoost.Font = Enum.Font.Code
+btnBoost.Font = Enum.Font.GothamBold
 btnBoost.TextSize = 22
 btnBoost.AutoButtonColor = false
 btnBoost.Visible = false
@@ -312,6 +236,7 @@ boostStroke.Color = COR_PROPULSOR
 boostStroke.Thickness = 1.5
 boostStroke.Parent = btnBoost
 
+-- Status Label
 local statusFlyLbl = Instance.new("TextLabel")
 statusFlyLbl.Size = UDim2.new(0, 160, 0, 26)
 statusFlyLbl.Position = UDim2.new(0, 20, 1, -110)
@@ -488,7 +413,6 @@ btnFly.MouseButton1Click:Connect(function()
     if flyAtivo then desativarFly() else ativarFly() end
 end)
 
--- Lógica do BOOST por clique (Toggle)
 btnBoost.MouseButton1Click:Connect(function()
     boostAtivo = not boostAtivo
     if boostAtivo then
@@ -694,8 +618,8 @@ end
 local ArmorTab = Window:Tab({ Title = "Armadura", Icon = "shield-check" })
 ArmorTab:Section({ Title = "Sistemas de Visão" })
 ArmorTab:Toggle({
-    Title = "Ativar HUD da Armadura (A.R.I.A.)",
-    Desc = "Liga a interface tática imersiva na tela.",
+    Title = "Ativar HUD da Armadura",
+    Desc = "Liga a interface holográfica na tela.",
     Value = false,
     Callback = function(state) toggleHUD(state) end
 })
@@ -732,12 +656,12 @@ SystemTab:Button({
 SystemTab:Section({ Title = "Informações" })
 SystemTab:Paragraph({
     Title = "Stark Combat Hub",
-    Desc = "Interface de RP completa com voo, HUD e ESP.\nVersão: 5.0 (HUD Atualizado + Boost Toggle)\nDesign baseado no Homem de Ferro."
+    Desc = "Interface de RP completa com voo, HUD e ESP.\nVersão: 5.1 (HUD Limpo + Fly Toggle)\nDesign baseado no Homem de Ferro."
 })
 
 WindUI:Notify({
     Title = "STARK ONLINE",
-    Content = "",
+    Content = "HUD ajustado e Fly pronto para uso.",
     Duration = 6,
     Icon = "check-circle"
 })
