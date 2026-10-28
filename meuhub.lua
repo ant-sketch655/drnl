@@ -62,8 +62,8 @@ local comandos = {
     {nome = "//mat 1x", cmd = "/mat", vezes = 1},
     {nome = "//mat 3x", cmd = "/mat", vezes = 3},
     {nome = "//Render", cmd = "/render", vezes = 3},
-    {nome = "//Derrubar no chão", cmd = "/derrubar no chão", vezes = 1},
-    {nome = "//mata leão", cmd = "/mata leão", vezes = 1},
+    {nome = "//facada", cmd = "/facada no crânio", vezes = 1},
+    {nome = "//pd", cmd = "/pd", vezes = 1},
 }
 
 -- ✅ COOLDOWN entre cada repetição do 3x
