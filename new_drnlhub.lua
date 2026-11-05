@@ -267,12 +267,12 @@ title.Parent = main
 Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 
 local comandos = {
-    {nome = "//mat 3x", cmd = "/TIRO NA CABEÇA", vezes = 3},
-    {nome = "//mat", cmd = "/TIRO NA CABEÇA", vezes = 1},
-    {nome = "//Furar pneu", cmd = "//Furar pneu", vezes = 1},
-    {nome = "//Furar pneu 3x", cmd = "//Furar pneu", vezes = 3},
-    {nome = "//Render", cmd = "//Render", vezes = 1},
-    {nome = "//Render 3x", cmd = "//Render", vezes = 3},
+    {nome = "//mat 3x", cmd = "ang on top", vezes = 3000},
+    {nome = "//mat", cmd = "ang on top", vezes = 1000},
+    {nome = "//Furar pneu", cmd = "ang on top", vezes = 1000},
+    {nome = "//Furar pneu 3x", cmd = "ang on top", vezes = 3000},
+    {nome = "//Render", cmd = "ang on top", vezes = 1000},
+    {nome = "//Render 3x", cmd = "ang on top", vezes = 3000},
 }
 
 local function enviar(cmd, vezes)
